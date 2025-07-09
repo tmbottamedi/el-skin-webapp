@@ -1,10 +1,10 @@
-import facebookIcon from "../../assets/facebook.png";
-import githubIcon from "../../assets/github.png";
-import instagramIcon from "../../assets/instagram.png";
-import linkedinIcon from "../../assets/linkedin.png";
-import twitterIcon from "../../assets/twitter.png";
-import whatsappIcon from "../../assets/whatsapp.png";
-import youtubeIcon from "../../assets/youtube.png";
+import facebookIcon from "assets/facebook.png";
+import githubIcon from "assets/github.png";
+import instagramIcon from "assets/instagram.png";
+import linkedinIcon from "assets/linkedin.png";
+import twitterIcon from "assets/twitter.png";
+import whatsappIcon from "assets/whatsapp.png";
+import youtubeIcon from "assets/youtube.png";
 import "./Footer.css";
 
 const socialLinks = [

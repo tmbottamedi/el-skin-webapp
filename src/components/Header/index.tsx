@@ -1,6 +1,6 @@
 import "./Header.css";
-import searchIcon from "../../assets/search-icon.svg";
-import cartIcon from "../../assets/cart-icon.svg";
+import searchIcon from "assets/search-icon.svg";
+import cartIcon from "assets/cart-icon.svg";
 
 export default function Header() {
   return (
