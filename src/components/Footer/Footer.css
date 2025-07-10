@@ -46,12 +46,12 @@
   min-width: 180px;
 }
 
-.column-title {
-  font-size: 1rem;
+.footer-column a {
+  text-decoration: none;
+  color: #333;
   font-weight: bold;
-  text-decoration: underline;
-  text-underline-offset: 4px;
   margin-bottom: 15px;
+  display: block;
 }
 
 .column-links {
@@ -64,12 +64,10 @@
   margin-bottom: 10px;
 }
 
-.column-links li::before {
-  content: "- ";
-}
-
 .column-links a {
   text-decoration: none;
+  font-weight: normal;
+  margin: 0;
   color: #555;
 }
 

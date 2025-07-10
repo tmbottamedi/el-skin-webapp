@@ -20,31 +20,35 @@ const socialLinks = [
 const footerColumns = [
   {
     title: "Sobre a AL SKIN",
+    url: "/sobre",
     links: [
-      { label: "quem somos", url: "/quemSomos" },
-      { label: "time AL SKIN", url: "/time" },
-      { label: "carreiras", url: "/carreiras" },
+      { label: "- quem somos", url: "/quemSomos" },
+      { label: "- time AL SKIN", url: "/time" },
+      { label: "- carreiras", url: "/carreiras" },
     ],
   },
   {
     title: "Loja AL SKIN",
+    url: "/loja",
     links: [
-      { label: "lojas físicas", url: "/lojas" },
-      { label: "devolução", url: "/devolucao" },
+      { label: "- lojas físicas", url: "/lojas" },
+      { label: "- devolução", url: "/devolucao" },
     ],
   },
   {
     title: "Atendimento",
+    url: "/atendimento",
     links: [
-      { label: "oi@alskin.com.br", url: "mailto:oi@alskin.com.br" },
-      { label: "ajuda", url: "/ajuda" },
+      { label: "- oi@alskin.com.br", url: "mailto:oi@alskin.com.br" },
+      { label: "- ajuda", url: "/ajuda" },
     ],
   },
   {
     title: "Blog AL SKIN",
+    url: "/blog",
     links: [
-      { label: "Minha pele", url: "/blog/minha-pele" },
-      { label: "Ingredientes", url: "/blog/ingredientes" },
+      { label: "- Minha pele", url: "/blog/minha-pele" },
+      { label: "- Ingredientes", url: "/blog/ingredientes" },
     ],
   },
 ];
@@ -67,7 +71,7 @@ export default function Footer() {
       <div className="footer-columns">
         {footerColumns.map((column) => (
           <div key={column.title} className="footer-column">
-            <h3 className="column-title">{column.title}</h3>
+            <a href={column.url}>{column.title}</a>
             <ul className="column-links">
               {column.links.map((link) => (
                 <li key={link.label}>
