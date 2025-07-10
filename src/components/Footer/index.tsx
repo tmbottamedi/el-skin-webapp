@@ -21,7 +21,7 @@ const footerColumns = [
   {
     title: "Sobre a AL SKIN",
     links: [
-      { label: "quem somos", url: "/quem-somos" },
+      { label: "quem somos", url: "/quemSomos" },
       { label: "time AL SKIN", url: "/time" },
       { label: "carreiras", url: "/carreiras" },
     ],
