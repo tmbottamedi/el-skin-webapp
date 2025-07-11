@@ -2,7 +2,6 @@ import "./About.css";
 import Header from "components/Header";
 import Footer from "components/Footer";
 
-// Lembre-se de colocar suas imagens na pasta de assets e ajustar os nomes
 import image1 from "assets/sobre1.png";
 import image2 from "assets/sobre2.png";
 import image3 from "assets/sobre3.png";

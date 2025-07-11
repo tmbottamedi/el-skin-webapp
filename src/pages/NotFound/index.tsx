@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom"; // 1. Importe o hook
+import { useNavigate } from "react-router-dom";
 import "./NotFound.css";
 
 export default function NotFound() {
-  const navigate = useNavigate(); // 2. Inicialize o hook
+  const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate(-1); // 3. A mágica acontece aqui!
+    navigate(-1);
   };
 
   return (
@@ -15,7 +15,6 @@ export default function NotFound() {
       <p className="not-found-description">
         Ops! A página que você está procurando não existe ou foi movida.
       </p>
-      {/* 4. Troque a tag <a> por <button> e adicione o onClick */}
       <button onClick={handleGoBack} className="not-found-button">
         Voltar para a página anterior
       </button>

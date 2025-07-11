@@ -13,7 +13,7 @@ import "./Carousel.css";
 
 const slideData = [
   {
-    image: image1, // Use suas imagens
+    image: image1,
     title: "anti-age",
     subtitle: "use o cupom ANTIAGE15 e ganhe 15% de desconto",
     callToAction: {

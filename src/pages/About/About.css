@@ -23,7 +23,7 @@
 }
 
 .about-text-content {
-  flex: 1; /* Ocupa metade do espaço */
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -51,7 +51,7 @@
 }
 
 .about-image-content {
-  flex: 1; /* Ocupa a outra metade */
+  flex: 1;
 }
 
 .about-main-image {
@@ -64,7 +64,7 @@
   text-align: center;
   padding: 60px 20px;
   background-color: #f9f9f9;
-  margin: 0 -20px; /* Faz a seção ocupar a largura do padding do container */
+  margin: 0 -20px;
 }
 
 .about-cta-section h2 {
@@ -78,7 +78,7 @@
 }
 
 .cta-button {
-  background-color: #8a48bf; /* Cor roxa (reutilizando do carrossel) */
+  background-color: #8a48bf;
   color: white;
   border: none;
   padding: 15px 30px;
