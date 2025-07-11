@@ -1,6 +1,6 @@
 import "./Header.css";
 import searchIcon from "assets/search-icon.svg";
-import cartIcon from "assets/cart-icon.svg";
+import shopIcon from "assets/shop-icon.svg";
 
 export default function Header() {
   return (
@@ -9,10 +9,14 @@ export default function Header() {
         <h2 className="header-logo">AL SKIN</h2>
         <div className="search-bar">
           <input type="text" placeholder="O que você está procurando?" />
-          <img className="search-icon" src={searchIcon} alt="Search Icon" />
+          <button className="search-button">
+            <img className="search-icon" src={searchIcon} alt="Search Icon" />
+          </button>
         </div>
         <div className="user-actions">
-          <img src={cartIcon} alt="Cart Icon" />
+          <button className="shop-button">
+            <img src={shopIcon} alt="Shop Icon" />
+          </button>
         </div>
       </div>
       <div className="header-bottom">
