@@ -1,17 +1,15 @@
 import Header from "components/Header";
 import ProductShowcase from "components/ProductShowcase";
 import Footer from "components/Footer";
+import Carousel from "components/Carousel";
 
 export default function Home() {
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-    >
+    <>
       <Header />
-      <main style={{ flexGrow: 1 }}>
-        <ProductShowcase />
-      </main>
+      <Carousel />
+      <ProductShowcase />
       <Footer />
-    </div>
+    </>
   );
 }

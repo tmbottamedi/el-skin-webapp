@@ -1,0 +1,68 @@
+.carousel-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  color: white;
+}
+
+.carousel-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10%;
+  box-sizing: border-box;
+}
+
+.slide-content {
+  background-color: rgba(0, 0, 0, 0.2); /* Fundo sutil para legibilidade */
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 450px;
+}
+
+.slide-content p {
+  font-size: 1rem;
+  text-transform: lowercase;
+  margin: 0;
+}
+
+.slide-content h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  text-transform: lowercase;
+  margin: 0.5rem 0;
+  color: #cda2e4;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: #8a48bf;
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #713a9e;
+}
