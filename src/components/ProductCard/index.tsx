@@ -1,20 +1,33 @@
 import produto from "assets/produto.png";
 import "./ProductCard.css";
 
-export default function ProductCard() {
+interface ProductCardProps {
+  name: string;
+  description: string;
+  price: string;
+  tags: string[];
+}
+
+export default function ProductCard({
+  name,
+  description,
+  price,
+  tags,
+}: Readonly<ProductCardProps>) {
   return (
     <div className="product-card">
       <img src={produto} alt="Produto" className="product-image" />
-      <h3 className="product-name">Protetor solar AL SUN</h3>
-      <p className="product-description">
-        alta proteção e pele luminosa sem grude nem pele cinzenta
-      </p>
+      <h3 className="product-name">{name}</h3>
+      <p className="product-description">{description}</p>
       <div className="product-tags">
-        <span className="tag">proteção</span>
-        <span className="tag">rosto</span>
+        {tags.map((tag) => (
+          <span key={tag} className="tag">
+            {tag}
+          </span>
+        ))}
       </div>
       <div className="product-buy">
-        <h2 className="price">R$ 79,90</h2>
+        <h2 className="price">{price}</h2>
         <button className="buy-button">Comprar</button>
       </div>
     </div>
