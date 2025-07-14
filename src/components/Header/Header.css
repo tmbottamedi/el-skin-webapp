@@ -28,11 +28,22 @@
 
 .search-bar input {
   width: 100%;
-  padding: 12px 20px 12px 20px;
+  padding: 12px;
   border: 1px solid #e0e0e0;
   border-radius: 25px;
   background-color: #f5f5f5;
   font-size: 1rem;
+}
+
+.search-button {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .search-icon {
@@ -48,6 +59,13 @@
   flex-basis: 150px;
   display: flex;
   justify-content: flex-end;
+}
+
+.shop-button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .header-bottom {

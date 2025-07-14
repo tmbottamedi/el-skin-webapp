@@ -1,20 +1,23 @@
-import facebookIcon from "assets/facebook.png";
-import githubIcon from "assets/github.png";
-import instagramIcon from "assets/instagram.png";
-import linkedinIcon from "assets/linkedin.png";
-import twitterIcon from "assets/twitter.png";
-import whatsappIcon from "assets/whatsapp.png";
-import youtubeIcon from "assets/youtube.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faInstagram,
+  faFacebookF,
+  faYoutube,
+  faPinterest,
+  faTwitter,
+  faLinkedinIn,
+  faSpotify,
+} from "@fortawesome/free-brands-svg-icons";
 import "./Footer.css";
 
 const socialLinks = [
-  { icon: facebookIcon, url: "https://www.facebook.com" },
-  { icon: githubIcon, url: "https://github.com" },
-  { icon: instagramIcon, url: "https://www.instagram.com" },
-  { icon: linkedinIcon, url: "https://www.linkedin.com" },
-  { icon: twitterIcon, url: "https://www.twitter.com" },
-  { icon: youtubeIcon, url: "https://www.youtube.com" },
-  { icon: whatsappIcon, url: "https://api.whatsapp.com" },
+  { icon: faInstagram, url: "https://www.instagram.com" },
+  { icon: faFacebookF, url: "https://www.facebook.com" },
+  { icon: faYoutube, url: "https://www.youtube.com" },
+  { icon: faPinterest, url: "https://www.pinterest.com" },
+  { icon: faTwitter, url: "https://www.twitter.com" },
+  { icon: faLinkedinIn, url: "https://www.linkedin.com" },
+  { icon: faSpotify, url: "https://www.spotify.com" },
 ];
 
 const footerColumns = [
@@ -64,7 +67,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src={link.icon} alt="Social Icon" className="social-icon" />
+            <FontAwesomeIcon icon={link.icon} color="#000" fontSize={30} />
           </a>
         ))}
       </div>
