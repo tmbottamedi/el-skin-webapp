@@ -62,7 +62,7 @@ function Carousel() {
       console.log("limpou o interval....");
       clearInterval(timer);
     };
-  }, []);
+  }, [items.length]);
 
   return (
     <section

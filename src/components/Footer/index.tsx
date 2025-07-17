@@ -9,6 +9,7 @@ import {
   faSpotify,
 } from "@fortawesome/free-brands-svg-icons";
 import "./Footer.css";
+import { Link } from "react-router-dom";
 
 const socialLinks = [
   { icon: faInstagram, url: "https://www.instagram.com" },
@@ -78,7 +79,9 @@ export default function Footer() {
             <ul className="column-links">
               {column.links.map((link) => (
                 <li key={link.label}>
-                  <a href={link.url}>{link.label}</a>
+                  <Link className="footer-link" to={link.url} key={link.label}>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
