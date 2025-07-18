@@ -1,10 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Img1 from "assets/carousel1.png";
-import Img2 from "assets/carousel2.png";
-import Img3 from "assets/carousel3.png";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import "./Carousel.css";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface ICarouselItem {
   subtitle: string;
@@ -14,28 +12,29 @@ interface ICarouselItem {
 }
 
 function Carousel() {
-  const items: ICarouselItem[] = [
-    {
-      subtitle: "confira nossa linha",
-      title: "corporal",
-      description: "com benefícios além da hidratação",
-      backgroundImage: Img1,
-    },
-    {
-      subtitle: "toda linha",
-      title: "anti-age",
-      description: "use o cupom ANTIAGE15",
-      backgroundImage: Img2,
-    },
-    {
-      subtitle: "",
-      title: "kits incríveis",
-      description: "até 50% OFF",
-      backgroundImage: Img3,
-    },
-  ];
+  const [items, setItems] = useState<ICarouselItem[]>([]);
 
   const [idxItemAtual, setIdxItemAtual] = useState(0);
+
+  useEffect(() => {
+    async function fetchItems() {
+      try {
+        const newItems = await axios.get<ICarouselItem[]>(
+          "http://localhost:3001/carousel"
+        );
+        setItems(newItems.data);
+      } catch (error) {
+        console.error("Erro ao buscar os itens do carrossel:", error);
+      }
+    }
+
+    fetchItems();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => nextItem(), 3000);
+    return () => clearInterval(timer);
+  }, [items]);
 
   function previousItem() {
     setIdxItemAtual((prevIdx) =>
@@ -49,72 +48,62 @@ function Carousel() {
     );
   }
 
-  useEffect(() => {
-    console.log("criou o interval....");
-    const timer = setInterval(() => {
-      console.log("ciclou o elemento....");
-      setIdxItemAtual((prevIdxItemAtual) => {
-        return (prevIdxItemAtual + 1) % items.length;
-      });
-    }, 3000);
-
-    return () => {
-      console.log("limpou o interval....");
-      clearInterval(timer);
-    };
-  }, [items.length]);
-
   return (
-    <section
-      className="carouselSection"
-      style={{
-        backgroundImage: `url(${items[idxItemAtual].backgroundImage})`,
-      }}
-    >
-      <div className="carouselContainer">
-        <div className="carouselContent">
-          <button
-            className="carouselNavButton"
-            aria-label="Voltar"
-            onClick={previousItem}
-          >
-            <FontAwesomeIcon
-              width="60"
-              height="24"
-              icon={faAngleLeft}
-              style={{ color: "white" }}
-            />
-          </button>
+    <>
+      {items.length === 0 && <h6>Carregando...</h6>}
+      {items.length > 0 && (
+        <section
+          className="carouselSection"
+          style={{
+            backgroundImage: `url(${items[idxItemAtual].backgroundImage})`,
+          }}
+        >
+          <div className="carouselContainer">
+            <div className="carouselContent">
+              <button
+                className="carouselNavButton"
+                aria-label="Voltar"
+                onClick={previousItem}
+              >
+                <FontAwesomeIcon
+                  width="60"
+                  height="24"
+                  icon={faAngleLeft}
+                  style={{ color: "white" }}
+                />
+              </button>
 
-          <div className="carouselText">
-            <span className="carouselSubtitle">
-              {items[idxItemAtual].subtitle}
-            </span>
-            <h1 className="carouselTitle">{items[idxItemAtual].title}</h1>
-            <p className="carouselDescription">
-              {items[idxItemAtual].description}
-            </p>
-            <button className="carouselCtaButton">
-              comprar agora
-              <FontAwesomeIcon icon={faAngleRight} />
-            </button>
+              <div className="carouselText">
+                <span className="carouselSubtitle">
+                  {items[idxItemAtual].subtitle}
+                </span>
+                <h1 className="carouselTitle">{items[idxItemAtual].title}</h1>
+                <p className="carouselDescription">
+                  {items[idxItemAtual].description}
+                </p>
+                <button className="carouselCtaButton">
+                  comprar agora
+                  <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+              </div>
+
+              <button
+                className="carouselNavButton"
+                aria-label="Próximo"
+                onClick={nextItem}
+              >
+                <FontAwesomeIcon
+                  width="60"
+                  height="24"
+                  icon={faAngleRight}
+                  style={{ color: "white" }}
+                />
+              </button>
+            </div>
           </div>
-
-          <button
-            className="carouselNavButton"
-            aria-label="Próximo"
-            onClick={nextItem}
-          >
-            <FontAwesomeIcon
-              width="60"
-              height="24"
-              icon={faAngleRight}
-              style={{ color: "white" }}
-            />
-          </button>
-        </div>
-      </div>
-    </section>
+        </section>
+      )}
+    </>
   );
 }
 
