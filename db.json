@@ -28,7 +28,7 @@
       "name": "Creme Hidratante Facial",
       "description": "Creme nutritivo para hidratação profunda da pele do rosto, com extrato de aloe vera.",
       "price": 45.99,
-      "image": "/assets/prod1.png",
+      "image": "/prod1.jpg",
       "tags": ["face", "hydration"]
     },
     {
@@ -36,7 +36,7 @@
       "name": "Protetor Solar SPF 50",
       "description": "Protetor solar de alta proteção contra raios UVA/UVB, resistente à água.",
       "price": 89.9,
-      "image": "/assets/prod2.png",
+      "image": "/prod2.jpg",
       "tags": ["protection", "sun"]
     },
     {
@@ -44,7 +44,7 @@
       "name": "Máscara de Argila Verde",
       "description": "Máscara purificante para controle de oleosidade e limpeza dos poros.",
       "price": 32.5,
-      "image": "/assets/prod3.png",
+      "image": "/prod3.jpg",
       "tags": ["face", "cleansing"]
     },
     {
@@ -52,7 +52,7 @@
       "name": "Sérum Antirrugas",
       "description": "Sérum com ácido hialurônico para redução de linhas finas e rugas.",
       "price": 78.2,
-      "image": "/assets/prod4.png",
+      "image": "/prod4.jpg",
       "tags": ["face", "anti-aging"]
     },
     {
@@ -60,7 +60,7 @@
       "name": "Bálsamo Labial Hidratante",
       "description": "Bálsamo com manteiga de karité para lábios ressecados e proteção diária.",
       "price": 12.75,
-      "image": "/assets/prod5.png",
+      "image": "/prod5.jpg",
       "tags": ["lips", "hydration"]
     },
     {
@@ -68,7 +68,7 @@
       "name": "Esfoliante Facial",
       "description": "Esfoliante suave com microesferas naturais para renovação da pele.",
       "price": 25.8,
-      "image": "/assets/prod6.png",
+      "image": "/prod6.jpg",
       "tags": ["face", "exfoliation"]
     },
     {
@@ -76,7 +76,7 @@
       "name": "Tônico Revitalizante",
       "description": "Tônico refrescante com extrato de chá verde para equilibrar o pH da pele.",
       "price": 38.4,
-      "image": "/assets/prod7.png",
+      "image": "/prod7.jpg",
       "tags": ["face", "toning"]
     },
     {
@@ -84,7 +84,7 @@
       "name": "Óleo Corporal Hidratante",
       "description": "Óleo leve com fragrância de lavanda para hidratação intensiva da pele.",
       "price": 65.3,
-      "image": "/assets/prod8.png",
+      "image": "/prod8.jpg",
       "tags": ["body", "hydration"]
     }
   ]
