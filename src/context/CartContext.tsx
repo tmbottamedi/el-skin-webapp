@@ -3,10 +3,17 @@ import React, {
   ReactNode,
   useContext,
   useMemo,
-  useState,
   useCallback,
-  useEffect,
+  useReducer,
 } from "react";
+import {
+  cartReducer,
+  CartState,
+  ADD_ITEM,
+  DECREMENT_ITEM,
+  REMOVE_FROM_CART,
+  TOGGLE_CART,
+} from "reducers/cartReducer";
 
 export interface CartItem {
   id: string;
@@ -34,97 +41,67 @@ interface CartProviderProps {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [quantity, setQuantity] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
+const initialState: CartState = {
+  items: [],
+  isCartOpen: false,
+};
 
-  const { totalTemp, quantityTemp } = useMemo(() => {
-    return items.reduce(
+export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
+  const [state, dispatch] = useReducer(cartReducer, initialState);
+
+  const { totalPrice, quantity } = useMemo(() => {
+    return state.items.reduce(
       (acc, item) => {
-        acc.totalTemp += item.price * item.quantity;
-        acc.quantityTemp += item.quantity;
+        acc.totalPrice += item.price * item.quantity;
+        acc.quantity += item.quantity;
         return acc;
       },
-      { totalTemp: 0, quantityTemp: 0 }
+      { totalPrice: 0, quantity: 0 }
     );
-  }, [items]);
+  }, [state.items]);
 
-  useEffect(() => {
-    setTotalPrice(totalTemp);
-    setQuantity(quantityTemp);
-  }, [totalTemp, quantityTemp]);
+  const addItem = useCallback((item: CartItem) => {
+    dispatch({ type: ADD_ITEM, payload: item });
+  }, []);
+
+  const removeItem = useCallback((id: string) => {
+    dispatch({ type: DECREMENT_ITEM, payload: id });
+  }, []);
+
+  const removeFromCart = useCallback((id: string) => {
+    dispatch({ type: REMOVE_FROM_CART, payload: id });
+  }, []);
 
   const handleCartToggle = useCallback(() => {
-    setIsCartOpen((prev) => !prev);
+    dispatch({ type: TOGGLE_CART });
   }, []);
 
   const getItemQuantity = useCallback(
     (id: string): number => {
-      const item = items.find((item) => item.id === id);
+      const item = state.items.find((item) => item.id === id);
       return item ? item.quantity : 0;
     },
-    [items]
+    [state.items]
   );
-
-  const addItem = useCallback(
-    (item: CartItem) => {
-      const existingItem = items.find((i) => i.id === item.id);
-      if (existingItem) {
-        setItems((prevItems) =>
-          prevItems.map((i) =>
-            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-          )
-        );
-      } else {
-        setItems((prevItems) => [...prevItems, { ...item, quantity: 1 }]);
-      }
-    },
-    [items]
-  );
-
-  const removeItem = useCallback(
-    (id: string) => {
-      const existingItem = items.find((i) => i.id === id);
-      if (!existingItem) return;
-      if (existingItem.quantity > 1) {
-        setItems((prevItems) =>
-          prevItems.map((i) =>
-            i.id === id ? { ...i, quantity: i.quantity - 1 } : i
-          )
-        );
-      } else {
-        setItems((prevItems) => prevItems.filter((i) => i.id !== id));
-      }
-    },
-    [items]
-  );
-
-  const removeFromCart = useCallback((id: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  }, []);
 
   const contextValue = useMemo(
     () => ({
-      items,
+      ...state,
       addItem,
       removeItem,
       removeFromCart,
-      getItemQuantity,
-      isCartOpen,
       handleCartToggle,
+      getItemQuantity,
       quantity,
       totalPrice,
     }),
     [
-      items,
+      state,
       addItem,
       removeItem,
       removeFromCart,
-      getItemQuantity,
-      isCartOpen,
       handleCartToggle,
+      getItemQuantity,
       quantity,
       totalPrice,
     ]
