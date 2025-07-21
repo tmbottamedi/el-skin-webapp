@@ -1,11 +1,13 @@
+import { useState } from "react";
 import AppRouter from "routes";
+import { SearchContext } from "context/SearchContext";
 
-function App() {
+export default function App() {
+  const [search, setSearch] = useState("");
+
   return (
-    <div className="App">
+    <SearchContext value={{ search: search, setSearch: setSearch }}>
       <AppRouter />
-    </div>
+    </SearchContext>
   );
 }
-
-export default App;

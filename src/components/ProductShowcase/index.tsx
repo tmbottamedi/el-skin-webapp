@@ -1,11 +1,15 @@
+import { useContext, useEffect, useState } from "react";
+import { IProduct, productService } from "service/productService";
+import ProductCard from "components/ProductCard";
 import "./ProductShowcase.css";
-import ProductCard, { IProduct } from "../ProductCard";
-import { useState, useEffect } from "react";
-import { productService } from "service/productService";
+import { SearchContext } from "context/SearchContext";
 
-export default function ProductShowcase() {
+function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
+
+  const { search } = useContext(SearchContext);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -15,6 +19,20 @@ export default function ProductShowcase() {
 
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (search) {
+      setFilteredProducts(
+        products.filter(
+          (product) =>
+            product.name.toLowerCase().includes(search.toLowerCase()) ||
+            product.description.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredProducts([...products]);
+    }
+  }, [search, products]);
 
   const handleProductClick = (productId: string) => {
     console.log(`Produto clicado: ${productId}`);
@@ -31,7 +49,7 @@ export default function ProductShowcase() {
         <h2 className="product-grid-title">{title}</h2>
 
         <div className="product-grid">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
@@ -44,3 +62,5 @@ export default function ProductShowcase() {
     </section>
   );
 }
+
+export default ProductShowcase;

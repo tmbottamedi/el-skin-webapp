@@ -1,17 +1,18 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import { SearchContext } from "context/SearchContext";
 
 export default function Header() {
-  const [textoBusca, setTextoBusca] = useState("valor inicial do texto");
+  const { search, setSearch } = useContext(SearchContext);
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setTextoBusca(e.target.value);
+    setSearch(e.target.value);
   }
 
-  function onClickSearch() {
-    alert(`Você pesquisou por: ${textoBusca}`);
+  function onClickSearch(): void {
+    console.log(`Você pesquisou por: ${search}`);
   }
 
   return (
