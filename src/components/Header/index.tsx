@@ -1,11 +1,11 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import React, { useContext } from "react";
-import { SearchContext } from "context/SearchContext";
+import React from "react";
+import { useSearchContext } from "context/SearchContext";
 
 export default function Header() {
-  const { search, setSearch } = useContext(SearchContext);
+  const { search, setSearch } = useSearchContext();
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearch(e.target.value);

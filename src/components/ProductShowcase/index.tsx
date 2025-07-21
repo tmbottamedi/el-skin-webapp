@@ -1,15 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IProduct, productService } from "service/productService";
 import ProductCard from "components/ProductCard";
 import "./ProductShowcase.css";
-import { SearchContext } from "context/SearchContext";
+import { useSearchContext } from "context/SearchContext";
 
 function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
 
-  const { search } = useContext(SearchContext);
+  const { search } = useSearchContext();
 
   useEffect(() => {
     const fetchProducts = async () => {
