@@ -16,7 +16,7 @@ interface CartModalProps {
 }
 
 const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
-  const { addItem, removeItem } = useCartContext();
+  const { addItem, removeItem, totalPrice, removeFromCart } = useCartContext();
 
   if (!isOpen) return null;
 
@@ -87,7 +87,11 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
                           </button>
                         </div>
 
-                        <button className="remove-btn" title="Remover item">
+                        <button
+                          className="remove-btn"
+                          title="Remover item"
+                          onClick={() => removeFromCart(item.id)}
+                        >
                           <FontAwesomeIcon icon={faTrash} />
                         </button>
                       </div>
@@ -102,7 +106,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
 
               <div className="cart-total">
                 <span className="total-label">Total</span>
-                <span className="total-price">0</span>
+                <span className="total-price">
+                  {totalPrice?.toFixed(2) ?? 0}
+                </span>
               </div>
 
               <button className="finalize-btn">Finalizar compra</button>

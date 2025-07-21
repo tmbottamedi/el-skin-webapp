@@ -8,7 +8,7 @@ import { useCartContext } from "context/CartContext";
 
 export default function Header() {
   const { search, setSearch } = useSearchContext();
-  const { items, isCartOpen, handleCartToggle } = useCartContext();
+  const { items, isCartOpen, handleCartToggle, quantity } = useCartContext();
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearch(e.target.value);
@@ -35,6 +35,7 @@ export default function Header() {
         <div className="user-actions">
           <button className="shop-button" onClick={handleCartToggle}>
             <FontAwesomeIcon icon={faCartShopping} />
+            <span>{quantity === 0 ? "" : quantity}</span>
           </button>
         </div>
       </div>

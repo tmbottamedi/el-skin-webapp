@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
   useCallback,
+  useEffect,
 } from "react";
 
 export interface CartItem {
@@ -19,9 +20,12 @@ export interface CartContextType {
   items: CartItem[];
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
+  removeFromCart: (id: string) => void;
   getItemQuantity: (id: string) => number;
   isCartOpen: boolean;
   handleCartToggle: () => void;
+  quantity: number;
+  totalPrice: number;
 }
 
 interface CartProviderProps {
@@ -33,6 +37,24 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const { totalTemp, quantityTemp } = useMemo(() => {
+    return items.reduce(
+      (acc, item) => {
+        acc.totalTemp += item.price * item.quantity;
+        acc.quantityTemp += item.quantity;
+        return acc;
+      },
+      { totalTemp: 0, quantityTemp: 0 }
+    );
+  }, [items]);
+
+  useEffect(() => {
+    setTotalPrice(totalTemp);
+    setQuantity(quantityTemp);
+  }, [totalTemp, quantityTemp]);
 
   const handleCartToggle = useCallback(() => {
     setIsCartOpen((prev) => !prev);
@@ -79,16 +101,33 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     [items]
   );
 
+  const removeFromCart = useCallback((id: string) => {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       items,
       addItem,
       removeItem,
+      removeFromCart,
       getItemQuantity,
       isCartOpen,
       handleCartToggle,
+      quantity,
+      totalPrice,
     }),
-    [items, addItem, removeItem, getItemQuantity, isCartOpen, handleCartToggle]
+    [
+      items,
+      addItem,
+      removeItem,
+      removeFromCart,
+      getItemQuantity,
+      isCartOpen,
+      handleCartToggle,
+      quantity,
+      totalPrice,
+    ]
   );
 
   return <CartContext value={contextValue}>{children}</CartContext>;
