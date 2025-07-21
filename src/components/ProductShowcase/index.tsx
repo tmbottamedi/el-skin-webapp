@@ -3,6 +3,8 @@ import { IProduct, productService } from "service/productService";
 import ProductCard from "components/ProductCard";
 import "./ProductShowcase.css";
 import { useSearchContext } from "context/SearchContext";
+import { useCartContext } from "context/CartContext";
+import CartModal from "components/CartModal";
 
 function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
@@ -10,6 +12,8 @@ function ProductShowcase() {
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
 
   const { search } = useSearchContext();
+  const { items, addItem, getItemQuantity, isCartOpen, handleCartToggle } =
+    useCartContext();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -38,9 +42,16 @@ function ProductShowcase() {
     console.log(`Produto clicado: ${productId}`);
   };
 
-  const handleBuyClick = (productId: string, event: React.MouseEvent) => {
+  const handleBuyClick = (product: IProduct, event: React.MouseEvent) => {
     event.stopPropagation();
-    console.log(`Comprar produto: ${productId}`);
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: getItemQuantity(product.id) + 1,
+    });
+    handleCartToggle();
   };
 
   return (
@@ -59,6 +70,7 @@ function ProductShowcase() {
           ))}
         </div>
       </div>
+      <CartModal isOpen={isCartOpen} onClose={handleCartToggle} items={items} />
     </section>
   );
 }

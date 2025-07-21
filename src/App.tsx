@@ -1,10 +1,13 @@
 import AppRouter from "routes";
 import { SearchProvider } from "context/SearchContext";
+import { CartProvider } from "context/CartContext";
 
 export default function App() {
   return (
-    <SearchProvider>
-      <AppRouter />
-    </SearchProvider>
+    <CartProvider>
+      <SearchProvider>
+        <AppRouter />
+      </SearchProvider>
+    </CartProvider>
   );
 }
