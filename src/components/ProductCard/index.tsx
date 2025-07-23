@@ -1,17 +1,6 @@
 import React from "react";
 import "./ProductCard.css";
-
-export interface IProduct {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  tags: Array<{
-    label: string;
-    type: "protection" | "face";
-  }>;
-}
+import { IProduct } from "types/Product";
 
 interface ProductCardProps {
   product: IProduct;
@@ -47,10 +36,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="product-tags">
           {product.tags.map((tag) => (
             <span
-              key={`${product.id}-${tag.label}-${tag.type}`}
-              className={`product-tag product-tag--${tag.type}`}
+              key={`${product.id}-${tag}`}
+              className={`product-tag product-tag--${tag}`}
             >
-              {tag.label}
+              {tag}
             </span>
           ))}
         </div>

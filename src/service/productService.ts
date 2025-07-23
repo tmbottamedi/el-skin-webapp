@@ -1,17 +1,6 @@
 import { API_CONFIG } from "../config/APIConfig";
 import api from "./api";
-
-export interface IProduct {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  tags: Array<{
-    label: string;
-    type: "protection" | "face";
-  }>;
-}
+import { IProduct } from "types/Product";
 
 export const productService = {
   async getProducts(): Promise<IProduct[]> {
