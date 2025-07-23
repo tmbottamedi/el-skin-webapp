@@ -8,15 +8,15 @@ interface ProductCardProps {
   onBuyClick: (product: IProduct, event: React.MouseEvent) => void;
 }
 
+function formatPrice(price: number): string {
+  return `R$ ${price.toFixed(2).replace(".", ",")}`;
+}
+
 const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onProductClick,
   onBuyClick,
 }) => {
-  const formatPrice = (price: number): string => {
-    return `R$ ${price.toFixed(2).replace(".", ",")}`;
-  };
-
   return (
     <button
       className="product-card"
