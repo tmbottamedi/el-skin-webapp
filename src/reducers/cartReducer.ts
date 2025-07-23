@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { CartItem } from "context/CartContext";
+import { CartItem } from "hooks/useCart";
 
 export const ADD_ITEM = "ADD_ITEM";
 export const DECREMENT_ITEM = "DECREMENT_ITEM";

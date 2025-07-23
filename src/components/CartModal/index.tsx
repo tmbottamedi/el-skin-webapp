@@ -7,7 +7,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import "./CartModal.css";
-import { CartItem, useCartContext } from "context/CartContext";
+import { useCartContext } from "context/CartContext";
+import { CartItem } from "hooks/useCart";
 
 interface CartModalProps {
   isOpen: boolean;
