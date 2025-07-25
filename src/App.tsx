@@ -1,11 +1,13 @@
 import AppRouter from "routes";
+import { SearchProvider } from "context/SearchContext";
+import { CartProvider } from "context/CartContext";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <AppRouter />
-    </div>
+    <CartProvider>
+      <SearchProvider>
+        <AppRouter />
+      </SearchProvider>
+    </CartProvider>
   );
 }
-
-export default App;

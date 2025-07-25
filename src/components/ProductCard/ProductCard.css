@@ -78,16 +78,8 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.product-tag--protection {
   background-color: #e3f2fd;
   color: #1976d2;
-}
-
-.product-tag--face {
-  background-color: #fce4ec;
-  color: #c2185b;
 }
 
 .product-footer {

@@ -1,22 +1,15 @@
 import React from "react";
 import "./ProductCard.css";
-
-export interface IProduct {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  tags: Array<{
-    label: string;
-    type: "protection" | "face";
-  }>;
-}
+import { IProduct } from "types/Product";
 
 interface ProductCardProps {
   product: IProduct;
   onProductClick: (productId: string) => void;
-  onBuyClick: (productId: string, event: React.MouseEvent) => void;
+  onBuyClick: (product: IProduct, event: React.MouseEvent) => void;
+}
+
+function formatPrice(price: number): string {
+  return `R$ ${price.toFixed(2).replace(".", ",")}`;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -24,10 +17,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onProductClick,
   onBuyClick,
 }) => {
-  const formatPrice = (price: number): string => {
-    return `R$ ${price.toFixed(2).replace(".", ",")}`;
-  };
-
   return (
     <button
       className="product-card"
@@ -47,10 +36,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="product-tags">
           {product.tags.map((tag) => (
             <span
-              key={`${product.id}-${tag.label}-${tag.type}`}
-              className={`product-tag product-tag--${tag.type}`}
+              key={`${product.id}-${tag}`}
+              className={`product-tag product-tag--${tag}`}
             >
-              {tag.label}
+              {tag}
             </span>
           ))}
         </div>
@@ -59,7 +48,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <span className="product-price">{formatPrice(product.price)}</span>
           <button
             className="product-buy-button"
-            onClick={(e) => onBuyClick(product.id, e)}
+            onClick={(e) => onBuyClick(product, e)}
             type="button"
           >
             comprar
