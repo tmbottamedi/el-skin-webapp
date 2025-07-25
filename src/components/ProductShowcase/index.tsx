@@ -7,7 +7,7 @@ import { useProducts } from "hooks/useProducts";
 function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
   const { products } = useProducts();
-  const { addItem, getItemQuantity, handleCartToggle } = useCartContext();
+  const { addItem, getItemQuantity } = useCartContext();
 
   const handleProductClick = (productId: string) => {
     console.log(`Produto clicado: ${productId}`);
@@ -19,7 +19,6 @@ function ProductShowcase() {
       ...product,
       quantity: getItemQuantity(product.id) + 1,
     });
-    handleCartToggle();
   };
 
   return (
