@@ -18,13 +18,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onBuyClick,
 }) => {
   return (
-    <button
+    <a
       data-testid="product-card"
       className="product-card"
       onClick={() => onProductClick(product.id)}
-      type="button"
-      tabIndex={0}
-      aria-label={`Ver detalhes do produto ${product.name}`}
     >
       <div className="product-image">
         <img src={product.image} alt={product.name} />
@@ -57,7 +54,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </button>
         </div>
       </div>
-    </button>
+    </a>
   );
 };
 

@@ -59,6 +59,6 @@ test("deve acionar o método onBuyClick quando o produto for clicado", () => {
   const card = screen.getByTestId("product-buy-button");
   fireEvent.click(card);
 
-  expect(handleProductClick).toBeCalledWith("1");
-  expect(handleProductClick).toHaveBeenCalledTimes(1);
+  expect(handleBuyClick).toHaveBeenCalledTimes(1);
+  expect(handleBuyClick).toHaveBeenCalledWith(product, expect.any(Object));
 });
