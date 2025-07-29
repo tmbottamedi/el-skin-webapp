@@ -12,13 +12,13 @@ import "./Footer.css";
 import { Link } from "react-router-dom";
 
 const socialLinks = [
-  { icon: faInstagram, url: "https://www.instagram.com" },
-  { icon: faFacebookF, url: "https://www.facebook.com" },
-  { icon: faYoutube, url: "https://www.youtube.com" },
-  { icon: faPinterest, url: "https://www.pinterest.com" },
-  { icon: faTwitter, url: "https://www.twitter.com" },
-  { icon: faLinkedinIn, url: "https://www.linkedin.com" },
-  { icon: faSpotify, url: "https://www.spotify.com" },
+  { icon: faInstagram, url: "https://www.instagram.com", label: "Instagram" },
+  { icon: faFacebookF, url: "https://www.facebook.com", label: "Facebook" },
+  { icon: faYoutube, url: "https://www.youtube.com", label: "Youtube" },
+  { icon: faPinterest, url: "https://www.pinterest.com", label: "Pinterest" },
+  { icon: faTwitter, url: "https://www.twitter.com", label: "Twitter" },
+  { icon: faLinkedinIn, url: "https://www.linkedin.com", label: "LinkedIn" },
+  { icon: faSpotify, url: "https://www.spotify.com", label: "Spotify" },
 ];
 
 const footerColumns = [
@@ -67,6 +67,7 @@ export default function Footer() {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Visite nosso ${link.label}`}
           >
             <FontAwesomeIcon icon={link.icon} color="#000" fontSize={30} />
           </a>

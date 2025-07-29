@@ -46,7 +46,11 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
       <div className="cart-modal">
         <div className="cart-modal-header">
           <h2 id="cart-modal-title">Carrinho</h2>
-          <button className="cart-modal-close" onClick={onClose}>
+          <button
+            data-testid="cart-modal-close"
+            className="cart-modal-close"
+            onClick={onClose}
+          >
             <FontAwesomeIcon icon={faTimes} />
           </button>
         </div>
@@ -72,6 +76,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
                         <span className="quantity-label">Quantidade</span>
                         <div className="quantity-controls">
                           <button
+                            data-testid="quantity-btn-minus"
                             className="quantity-btn"
                             onClick={() => removeItem(item.id)}
                           >
@@ -81,6 +86,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
                             {item.quantity}
                           </span>
                           <button
+                            data-testid="quantity-btn-plus"
                             className="quantity-btn"
                             onClick={() => addItem(item)}
                           >
@@ -89,6 +95,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
                         </div>
 
                         <button
+                          data-testid="remove-btn"
                           className="remove-btn"
                           title="Remover item"
                           onClick={() => removeFromCart(item.id)}
@@ -112,7 +119,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
                 </span>
               </div>
 
-              <button className="finalize-btn">Finalizar compra</button>
+              <button data-testid="finalize-btn" className="finalize-btn">
+                Finalizar compra
+              </button>
             </>
           )}
         </div>
