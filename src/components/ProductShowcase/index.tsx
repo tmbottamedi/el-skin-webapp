@@ -1,8 +1,8 @@
 import ProductCard from "components/ProductCard";
-import "./ProductShowcase.css";
 import { useCartContext } from "context/CartContext";
 import { IProduct } from "types/Product";
 import { useProducts } from "hooks/useProducts";
+import styled from "styled-components";
 
 function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
@@ -22,11 +22,11 @@ function ProductShowcase() {
   };
 
   return (
-    <section className="product-grid-section">
-      <div className="product-grid-container">
-        <h2 className="product-grid-title">{title}</h2>
+    <ProductGridSection>
+      <ProductGridContainer >
+        <ProductGridTitle className="product-grid-title">{title}</ProductGridTitle>
 
-        <div className="product-grid">
+        <ProductGrid>
           {products.map((product) => (
             <ProductCard
               key={product.id}
@@ -35,10 +35,36 @@ function ProductShowcase() {
               onBuyClick={handleBuyClick}
             />
           ))}
-        </div>
-      </div>
-    </section>
+        </ProductGrid >
+      </ProductGridContainer >
+    </ProductGridSection>
   );
 }
+
+const ProductGridSection = styled.section`
+  padding: 60px 20px;
+  background-color: ${({ theme }) => theme.colors.background.white};
+`;
+
+const ProductGridContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const ProductGridTitle = styled.h2`
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize["2xl"]};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  color: ${({ theme }) => theme.colors.text.primary};
+  margin-bottom: 40px;
+  font-family: "Arial", sans-serif;
+`;
+
+const ProductGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  justify-items: center;
+`;
 
 export default ProductShowcase;
