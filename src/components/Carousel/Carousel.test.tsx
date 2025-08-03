@@ -1,8 +1,9 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Carousel from ".";
 import { useCarousel } from "hooks/useCarousel";
 import { ICarouselItem } from "service/carouselService";
+import { render } from "utils/test-utils";
 
 jest.mock("hooks/useCarousel");
 const mockedUseCarousel = useCarousel as jest.Mock;

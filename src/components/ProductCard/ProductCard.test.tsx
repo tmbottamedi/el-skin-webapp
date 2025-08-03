@@ -1,7 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ProductCard from ".";
 import { IProduct } from "types/Product";
+import { render } from "utils/test-utils";
+
 const product: IProduct = {
   id: "1",
   name: "Produto Teste",

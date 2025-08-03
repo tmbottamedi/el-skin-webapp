@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { CartProvider, useCartContext } from "./CartContext";
 import { useCart } from "hooks/useCart";
+import { render } from "utils/test-utils";
 
 // Mock do hook useCart
 jest.mock("hooks/useCart");

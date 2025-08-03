@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import About from ".";
+import { render } from "utils/test-utils";
 
 test("tela About deve ser renderizada", () => {
   render(<About />);

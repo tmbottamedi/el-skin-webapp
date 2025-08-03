@@ -1,12 +1,27 @@
 /* eslint-disable quotes */
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import CartModal from ".";
-import { useCartContext } from "context/CartContext";
+import CartModal from ".";  
 import { CartItem } from "hooks/useCart";
+import { render } from "utils/test-utils";
 
-jest.mock("context/CartContext");
-const mockedUseCartContext = useCartContext as jest.Mock;
+let mockAddItem = jest.fn();
+let mockRemoveItem = jest.fn();
+let mockRemoveFromCart = jest.fn();
+let mockTotalPrice = 0;
+
+jest.mock("context/CartContext", () => {
+  return {
+    __esModule: true,
+    useCartContext: () => ({
+      addItem: mockAddItem,
+      removeItem: mockRemoveItem,
+      removeFromCart: mockRemoveFromCart,
+      totalPrice: mockTotalPrice,
+    }),
+    CartProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  };
+});
 
 const mockItems: CartItem[] = [
   {
@@ -27,19 +42,14 @@ const mockItems: CartItem[] = [
 
 describe("CartModal Component", () => {
   const mockOnClose = jest.fn();
-  const mockAddItem = jest.fn();
-  const mockRemoveItem = jest.fn();
-  const mockRemoveFromCart = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    mockedUseCartContext.mockReturnValue({
-      addItem: mockAddItem,
-      removeItem: mockRemoveItem,
-      removeFromCart: mockRemoveFromCart,
-      totalPrice: 321.0,
-    });
+    mockAddItem = jest.fn();
+    mockRemoveItem = jest.fn();
+    mockRemoveFromCart = jest.fn();
+    mockTotalPrice = 321.0;
   });
 
   it("não deve renderizar nada se isOpen for falso", () => {

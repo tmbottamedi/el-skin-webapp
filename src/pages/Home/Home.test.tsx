@@ -1,7 +1,8 @@
 /* eslint-disable react/display-name */
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Home from ".";
+import { render } from "utils/test-utils";
 
 // Mock dos componentes filhos para isolar o teste da página Home
 jest.mock("components/Carousel", () => () => <div>Carousel Component</div>);

@@ -1,20 +1,17 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Header from ".";
 import { SearchProvider } from "context/SearchContext";
 import { CartProvider } from "context/CartContext";
 import { useCart } from "hooks/useCart";
+import { render } from "utils/test-utils";
 
 jest.mock("hooks/useCart");
 const mockedUseCart = useCart as jest.Mock;
 
 const renderHeader = () => {
   return render(
-    <CartProvider>
-      <SearchProvider>
-        <Header />
-      </SearchProvider>
-    </CartProvider>
+    <Header />
   );
 };
 
@@ -83,11 +80,7 @@ describe("Header Component", () => {
     });
 
     const { rerender } = render(
-      <CartProvider>
-        <SearchProvider>
-          <Header />
-        </SearchProvider>
-      </CartProvider>
+      <Header />
     );
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -105,11 +98,7 @@ describe("Header Component", () => {
     });
 
     rerender(
-      <CartProvider>
-        <SearchProvider>
-          <Header />
-        </SearchProvider>
-      </CartProvider>
+      <Header />
     );
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -125,8 +114,7 @@ describe("Header Component", () => {
       renderHeader();
       const cartButton = screen.getByTestId("shop-button");
       const span = cartButton.querySelector("span");
-      expect(span).toBeInTheDocument();
-      expect(span).toHaveTextContent("");
+      expect(span).toBeNull();
     });
 
     it("deve exibir a quantidade correta quando há itens no carrinho", () => {

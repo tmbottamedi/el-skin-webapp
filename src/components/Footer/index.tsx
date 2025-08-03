@@ -8,8 +8,8 @@ import {
   faLinkedinIn,
   faSpotify,
 } from "@fortawesome/free-brands-svg-icons";
-import "./Footer.css";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const socialLinks = [
   { icon: faInstagram, url: "https://www.instagram.com", label: "Instagram" },
@@ -59,36 +59,112 @@ const footerColumns = [
 
 export default function Footer() {
   return (
-    <footer className="App-footer">
-      <div className="social-section">
+    <FooterContainer>
+      <SocialSection>
         {socialLinks.map((link) => (
-          <a
+          <SocialIconLink
             key={link.url}
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Visite nosso ${link.label}`}
           >
-            <FontAwesomeIcon icon={link.icon} color="#000" fontSize={30} />
-          </a>
+            <FontAwesomeIcon icon={link.icon} />
+          </SocialIconLink>
         ))}
-      </div>
-      <div className="footer-columns">
+      </SocialSection>
+      <FooterColumns>
         {footerColumns.map((column) => (
-          <div key={column.title} className="footer-column">
+          <FooterColumn key={column.title}>
             <a href={column.url}>{column.title}</a>
-            <ul className="column-links">
+            <ColumnLinks>
               {column.links.map((link) => (
                 <li key={link.label}>
-                  <Link className="footer-link" to={link.url} key={link.label}>
-                    {link.label}
-                  </Link>
+                  <ColumnLink to={link.url}>{link.label}</ColumnLink>
                 </li>
               ))}
-            </ul>
-          </div>
+            </ColumnLinks>
+          </FooterColumn>
         ))}
-      </div>
-    </footer>
+      </FooterColumns>
+    </FooterContainer>
   );
 }
+
+const FooterContainer = styled.footer`
+  background-color: ${({ theme }) => theme.colors.background.light};
+  padding: 40px 20px;
+  color: ${({ theme }) => theme.colors.text.primary};
+  font-family: sans-serif;
+`;
+
+const SocialSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 40px;
+`;
+
+const SocialIconLink = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background-color: #888;
+  color: white;
+  border-radius: 50%;
+  text-decoration: none;
+  font-size: 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background-color: #555;
+    transform: scale(1.1);
+  }
+`;
+
+const FooterColumns = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+`;
+
+const FooterColumn = styled.div`
+  flex: 1;
+  min-width: 180px;
+
+  > a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.text.primary};
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: block;
+  }
+`;
+
+const ColumnLinks = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 10px;
+  }
+`;
+
+const ColumnLink = styled(Link)`
+  text-decoration: none;
+  font-weight: normal;
+  margin: 0;
+  color: #555;
+
+  &:hover {
+    text-decoration: underline;
+    color: #000;
+  }
+`;

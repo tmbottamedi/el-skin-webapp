@@ -1,14 +1,13 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Footer from ".";
 import { BrowserRouter as Router } from "react-router-dom";
+import { render } from "utils/test-utils";
 
 describe("Footer Component", () => {
   const renderFooter = () => {
     return render(
-      <Router>
         <Footer />
-      </Router>
     );
   };
 
