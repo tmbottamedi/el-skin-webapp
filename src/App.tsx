@@ -1,13 +1,21 @@
-import AppRouter from "routes";
-import { SearchProvider } from "context/SearchContext";
-import { CartProvider } from "context/CartContext";
+import { ThemeProvider } from 'styled-components';
+import { CartProvider } from './context/CartContext';
+import { SearchProvider } from './context/SearchContext';
+import AppRouter from './routes';
+import { theme } from './styles/theme';
+import { GlobalStyles } from './styles/GlobalStyles';
 
-export default function App() {
+function App() {
   return (
-    <CartProvider>
-      <SearchProvider>
-        <AppRouter />
-      </SearchProvider>
-    </CartProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      <CartProvider>
+        <SearchProvider>
+          <AppRouter />
+        </SearchProvider>
+      </CartProvider>
+    </ThemeProvider>
   );
 }
+
+export default App;
