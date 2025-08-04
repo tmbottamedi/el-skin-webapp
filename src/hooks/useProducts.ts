@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { productService } from "service/productService";
 import { IProduct } from "types/Product";
-import { useSearchContext } from "context/SearchContext";
+import { useSearch } from "./useSearch";
 
 export const useProducts = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
-  const { search } = useSearchContext();
+  const { term } = useSearch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -18,18 +18,18 @@ export const useProducts = () => {
   }, []);
 
   useEffect(() => {
-    if (search) {
+    if (term) {
       setFilteredProducts(
         products.filter(
           (product) =>
-            product.name.toLowerCase().includes(search.toLowerCase()) ||
-            product.description.toLowerCase().includes(search.toLowerCase())
+            product.name.toLowerCase().includes(term.toLowerCase()) ||
+            product.description.toLowerCase().includes(term.toLowerCase())
         )
       );
     } else {
       setFilteredProducts([...products]);
     }
-  }, [search, products]);
+  }, [term, products]);
 
   return { products: filteredProducts };
 };

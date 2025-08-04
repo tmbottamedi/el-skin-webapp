@@ -3,20 +3,21 @@ import { render, RenderOptions } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "styles/theme";
 import { CartProvider } from "context/CartContext";
-import { SearchProvider } from "context/SearchContext";
+import { Provider } from "react-redux";
+import { store } from "store";
 import { BrowserRouter as Router } from "react-router-dom";
 
 const AllTheProviders: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <ThemeProvider theme={theme}>
-      <CartProvider>
-        <SearchProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CartProvider>
           <Router>{children}</Router>
-        </SearchProvider>
-      </CartProvider>
-    </ThemeProvider>
+        </CartProvider>
+      </ThemeProvider>
+    </Provider>
   );
 };
 

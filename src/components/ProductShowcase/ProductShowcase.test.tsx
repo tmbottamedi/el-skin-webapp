@@ -34,15 +34,13 @@ let mockSearchTerm = "";
 
 const mockAddItem = jest.fn();
 
-jest.mock("context/SearchContext", () => {
-  return {
-    __esModule: true,
-    useSearchContext: () => ({ search: mockSearchTerm }),
-    SearchProvider: ({ children }: { children: React.ReactNode }) => (
-      <>{children}</>
-    ),
-  };
-});
+jest.mock("hooks/useSearch", () => ({
+  useSearch: () => ({
+    term: mockSearchTerm,
+    setTerm: jest.fn(),
+    clearSearch: jest.fn(),
+  }),
+}));
 
 jest.mock("context/CartContext", () => {
   return {

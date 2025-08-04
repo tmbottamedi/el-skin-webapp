@@ -12,7 +12,13 @@ const searchSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
-    setTerm: (state, action) => {
+    setTerm: (
+      state,
+      action: {
+        payload: string;
+        type: string;
+      }
+    ) => {
       state.term = action.payload;
     },
   },

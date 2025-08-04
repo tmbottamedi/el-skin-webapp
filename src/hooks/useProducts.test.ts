@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { useProducts } from "./useProducts";
 import { productService } from "service/productService";
-import * as SearchContext from "context/SearchContext";
+import * as SearchHook from "hooks/useSearch";
 
 jest.mock("service/productService");
 const mockedProductService = productService as jest.Mocked<
@@ -28,14 +28,14 @@ const mockProducts = [
 ];
 
 describe("useProducts Hook", () => {
-  const mockUseSearchContext = jest.spyOn(SearchContext, "useSearchContext");
+  const mockUseSearchHook = jest.spyOn(SearchHook, "useSearch");
 
   beforeEach(() => {
     mockedProductService.getProducts.mockResolvedValue(mockProducts);
   });
 
   it("deve buscar e retornar todos os produtos sem termo de busca", async () => {
-    mockUseSearchContext.mockReturnValue({ search: "", setSearch: jest.fn() });
+    mockUseSearchHook.mockReturnValue({ term: "", setTerm: jest.fn() });
     const { result } = renderHook(() => useProducts());
     await act(async () => {
       await Promise.resolve();
@@ -44,9 +44,9 @@ describe("useProducts Hook", () => {
   });
 
   it("deve filtrar os produtos pelo nome", async () => {
-    mockUseSearchContext.mockReturnValue({
-      search: "Sérum",
-      setSearch: jest.fn(),
+    mockUseSearchHook.mockReturnValue({
+      term: "Sérum",
+      setTerm: jest.fn(),
     });
     const { result } = renderHook(() => useProducts());
     await act(async () => {
@@ -57,9 +57,9 @@ describe("useProducts Hook", () => {
   });
 
   it("deve filtrar os produtos pela descrição", async () => {
-    mockUseSearchContext.mockReturnValue({
-      search: "Proteção",
-      setSearch: jest.fn(),
+    mockUseSearchHook.mockReturnValue({
+      term: "Proteção",
+      setTerm: jest.fn(),
     });
     const { result } = renderHook(() => useProducts());
     await act(async () => {
