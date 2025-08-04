@@ -11,13 +11,15 @@ export default function NotFound() {
   return (
     <NotFoundContainer>
       <NotFoundTitle>404</NotFoundTitle>
-      <NotFoundSubtitle className="not-found-subtitle">Página não encontrada</NotFoundSubtitle>
+      <NotFoundSubtitle className="not-found-subtitle">
+        Página não encontrada
+      </NotFoundSubtitle>
       <NotFoundDescription>
         Ops! A página que você está procurando não existe ou foi movida.
       </NotFoundDescription>
-      <button onClick={handleGoBack} className="not-found-button">
+      <NotFoundButton onClick={handleGoBack}>
         Voltar para a página anterior
-      </button>
+      </NotFoundButton>
     </NotFoundContainer>
   );
 }

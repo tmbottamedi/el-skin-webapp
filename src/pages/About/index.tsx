@@ -6,7 +6,7 @@ import image3 from "assets/sobre3.png";
 
 export default function About() {
   return (
-     <AboutContainer>
+    <AboutContainer>
       <AboutTitle>Sobre a AL SKIN</AboutTitle>
       <AboutSectionOne>
         <AboutTextContent>
@@ -22,10 +22,16 @@ export default function About() {
             <h2>O QUE A GENTE FAZ?</h2>
             <p>Nemo enim ipsam voluptatem quia volupta..</p>
           </article>
-          <AboutDropperImage src={image2} alt="Frasco de produto com conta-gotas" />
+          <AboutDropperImage
+            src={image2}
+            alt="Frasco de produto com conta-gotas"
+          />
         </AboutTextContent>
         <AboutImageContent>
-          <AboutMainImage src={image1} alt="Mãos segurando um produto de skin care" />
+          <AboutMainImage
+            src={image1}
+            alt="Mãos segurando um produto de skin care"
+          />
         </AboutImageContent>
       </AboutSectionOne>
       <AboutCtaSection>
@@ -34,7 +40,10 @@ export default function About() {
         <CtaButton>seja um(a) revendedor(a)</CtaButton>
       </AboutCtaSection>
       <AboutBannerSection>
-        <AboutBannerImage src={image3} alt="Mão segurando um frasco de skin care" />
+        <AboutBannerImage
+          src={image3}
+          alt="Mão segurando um frasco de skin care"
+        />
       </AboutBannerSection>
     </AboutContainer>
   );

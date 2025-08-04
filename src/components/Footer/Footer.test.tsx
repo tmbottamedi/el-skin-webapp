@@ -1,14 +1,11 @@
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Footer from ".";
-import { BrowserRouter as Router } from "react-router-dom";
 import { render } from "utils/test-utils";
 
 describe("Footer Component", () => {
   const renderFooter = () => {
-    return render(
-        <Footer />
-    );
+    return render(<Footer />);
   };
 
   it("deve renderizar os títulos das colunas", () => {

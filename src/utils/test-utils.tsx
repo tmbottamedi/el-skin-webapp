@@ -1,12 +1,14 @@
 import React, { ReactElement } from "react";
 import { render, RenderOptions } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
-import { theme } from "../styles/theme";
+import { theme } from "styles/theme";
 import { CartProvider } from "context/CartContext";
 import { SearchProvider } from "context/SearchContext";
 import { BrowserRouter as Router } from "react-router-dom";
 
-const AllTheProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AllTheProviders: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   return (
     <ThemeProvider theme={theme}>
       <CartProvider>

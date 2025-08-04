@@ -1,8 +1,6 @@
 import { screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Header from ".";
-import { SearchProvider } from "context/SearchContext";
-import { CartProvider } from "context/CartContext";
 import { useCart } from "hooks/useCart";
 import { render } from "utils/test-utils";
 
@@ -10,9 +8,7 @@ jest.mock("hooks/useCart");
 const mockedUseCart = useCart as jest.Mock;
 
 const renderHeader = () => {
-  return render(
-    <Header />
-  );
+  return render(<Header />);
 };
 
 describe("Header Component", () => {
@@ -79,9 +75,7 @@ describe("Header Component", () => {
       handleCartToggle: handleCartToggle,
     });
 
-    const { rerender } = render(
-      <Header />
-    );
+    const { rerender } = render(<Header />);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
@@ -97,9 +91,7 @@ describe("Header Component", () => {
       handleCartToggle: handleCartToggle,
     });
 
-    rerender(
-      <Header />
-    );
+    rerender(<Header />);
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
