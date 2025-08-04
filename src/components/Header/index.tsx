@@ -1,21 +1,21 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { useSearchContext } from "context/SearchContext";
 import CartModal from "components/CartModal";
 import { useCartContext } from "context/CartContext";
 import styled from "styled-components";
+import { useSearch } from "hooks/useSearch";
 
 export default function Header() {
-  const { search, setSearch } = useSearchContext();
+  const { term, setTerm } = useSearch();
   const { items, isCartOpen, handleCartToggle, quantity } = useCartContext();
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearch(e.target.value);
+    setTerm(e.target.value);
   }
 
   function onClickSearch(): void {
-    console.log(`Você pesquisou por: ${search}`);
+    console.log(`Você pesquisou por: ${term}`);
   }
 
   return (
@@ -42,10 +42,18 @@ export default function Header() {
       <HeaderBottom>
         <nav>
           <NavLinks>
-            <li><a href="/">Categorias</a></li>
-            <li><a href="/types">Tipo de pele</a></li>
-            <li><a href="/needs">Necessidade</a></li>
-            <li><a href="/ingredients">Ingredientes</a></li>
+            <li>
+              <a href="/">Categorias</a>
+            </li>
+            <li>
+              <a href="/types">Tipo de pele</a>
+            </li>
+            <li>
+              <a href="/needs">Necessidade</a>
+            </li>
+            <li>
+              <a href="/ingredients">Ingredientes</a>
+            </li>
           </NavLinks>
         </nav>
         <PromotionBanner>
