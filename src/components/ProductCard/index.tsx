@@ -5,7 +5,7 @@ import styled from "styled-components";
 interface ProductCardProps {
   product: IProduct;
   onProductClick: (productId: string) => void;
-  onBuyClick: (product: IProduct, event: React.MouseEvent) => void;
+  onBuyClick: (productId: string, event: React.MouseEvent) => void;
 }
 
 function formatPrice(price: number): string {
@@ -19,7 +19,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   return (
     // eslint-disable-next-line
-    <Card data-testid="product-card" type="button" onClick={() => onProductClick(product.id)}>
+    <Card
+      data-testid="product-card"
+      type="button"
+      onClick={() => onProductClick(product.id)}
+    >
       <ProductImage>
         <img src={product.image} alt={product.name} />
       </ProductImage>
@@ -35,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <ProductPrice>{formatPrice(product.price)}</ProductPrice>
           <ProductBuyButton
             data-testid="product-buy-button"
-            onClick={(e) => onBuyClick(product, e)}
+            onClick={(e) => onBuyClick(product.id, e)}
             type="button"
           >
             comprar

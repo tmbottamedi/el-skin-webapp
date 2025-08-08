@@ -3,72 +3,103 @@ import "@testing-library/jest-dom";
 import ProductShowcase from ".";
 import * as ProductsHook from "hooks/useProducts";
 import * as CartHook from "hooks/useCart";
+import * as SearchHook from "hooks/useSearch";
 import { IProduct } from "types/Product";
 import { screen, fireEvent } from "@testing-library/dom";
+
+jest.mock("hooks/useProducts");
+jest.mock("hooks/useCart");
+jest.mock("hooks/useSearch");
+
+const mockUseProducts = ProductsHook.useProducts as jest.Mock;
+const mockUseCart = CartHook.useCart as jest.Mock;
+const mockUseSearch = SearchHook.useSearch as jest.Mock;
 
 const mockProducts: IProduct[] = [
   {
     id: "1",
-    name: "Produto Vitamina C",
-    description: "Descrição do produto 1",
-    price: 99.99,
-    image: "/image1.jpg",
-    tags: ["Proteção"],
+    name: "Creme Hidratante",
+    description: "Para pele sensível",
+    price: 75,
+    image: "img1.jpg",
+    tags: [],
+  },
+  {
+    id: "2",
+    name: "Loção de Limpeza",
+    description: "Remove impurezas",
+    price: 45,
+    image: "img2.jpg",
+    tags: [],
   },
 ];
 
-const mockUseProducts = jest.spyOn(ProductsHook, "useProducts");
-const mockUseCart = jest.spyOn(CartHook, "useCart");
-const mockHandleAddItem = jest.fn();
-
 describe("ProductShowcase Component", () => {
+  const mockLoadProducts = jest.fn();
+  const mockHandleAddItem = jest.fn();
+  const mockGetProductById = (id: string) =>
+    mockProducts.find((p) => p.id === id);
+
   beforeEach(() => {
-    mockUseProducts.mockReturnValue({ products: mockProducts });
-    mockUseCart.mockReturnValue({
-      items: [],
-      totalPrice: 0,
-      quantity: 0,
-      handleAddItem: mockHandleAddItem,
-      handleRemoveItem: jest.fn(),
-      handleRemoveFromCart: jest.fn(),
-      isCartOpen: false,
-      handleCartToggle: jest.fn(),
-      getItemQuantity: jest.fn(),
-    });
     jest.clearAllMocks();
+    mockUseCart.mockReturnValue({ handleAddItem: mockHandleAddItem });
+    mockUseSearch.mockReturnValue({ term: "" });
   });
 
-  it("deve renderizar o título e os produtos", () => {
+  it("deve chamar loadProducts na montagem se não houver produtos", () => {
+    mockUseProducts.mockReturnValue({
+      products: [],
+      loading: false,
+      error: null,
+      loadProducts: mockLoadProducts,
+      getProductById: jest.fn(),
+    });
+    render(<ProductShowcase />);
+    expect(mockLoadProducts).toHaveBeenCalledTimes(1);
+  });
+
+  it("deve renderizar a mensagem de carregamento", () => {
+    mockUseProducts.mockReturnValue({
+      products: [],
+      loading: true,
+      error: null,
+      loadProducts: jest.fn(),
+      getProductById: jest.fn(),
+    });
+    render(<ProductShowcase />);
+    expect(screen.getByText("Carregando produtos...")).toBeInTheDocument();
+  });
+
+  it("deve renderizar a mensagem de erro", () => {
+    mockUseProducts.mockReturnValue({
+      products: [],
+      loading: false,
+      error: "Falha na API",
+      loadProducts: jest.fn(),
+      getProductById: jest.fn(),
+    });
     render(<ProductShowcase />);
     expect(
-      screen.getByText("nossos queridinhos estão aqui")
+      screen.getByText("Erro ao carregar produtos: Falha na API")
     ).toBeInTheDocument();
-    expect(screen.getByText("Produto Vitamina C")).toBeInTheDocument();
   });
 
-  it("deve chamar handleAddItem ao clicar em comprar", () => {
-    const consoleSpy = jest.spyOn(console, "log");
+  it("deve renderizar produtos e chamar handleAddItem ao clicar em comprar", () => {
+    mockUseProducts.mockReturnValue({
+      products: mockProducts,
+      loading: false,
+      error: null,
+      loadProducts: jest.fn(),
+      getProductById: mockGetProductById,
+    });
     render(<ProductShowcase />);
 
-    const buyButton = screen.getByTestId("product-buy-button");
+    expect(screen.getByText("Creme Hidratante")).toBeInTheDocument();
+
+    const buyButton = screen.getAllByTestId("product-buy-button")[0];
     fireEvent.click(buyButton);
 
     expect(mockHandleAddItem).toHaveBeenCalledTimes(1);
     expect(mockHandleAddItem).toHaveBeenCalledWith(mockProducts[0]);
-
-    // Verifica se a propagação do evento foi parada
-    expect(consoleSpy).not.toHaveBeenCalledWith("Produto clicado: 1");
-    consoleSpy.mockRestore();
-  });
-
-  it("deve chamar o productClick handler ao clicar no card", () => {
-    const consoleSpy = jest.spyOn(console, "log");
-    render(<ProductShowcase />);
-
-    const productCard = screen.getByTestId("product-card");
-    fireEvent.click(productCard);
-
-    expect(consoleSpy).toHaveBeenCalledWith("Produto clicado: 1");
-    consoleSpy.mockRestore();
   });
 });

@@ -1,34 +1,88 @@
 import ProductCard from "components/ProductCard";
-import { IProduct } from "types/Product";
 import { useProducts } from "hooks/useProducts";
 import styled from "styled-components";
 import { useCart } from "hooks/useCart";
+import { useSearch } from "hooks/useSearch";
+import { useCallback, useEffect, useMemo } from "react";
 
 function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
-  const { products } = useProducts();
+  const { term } = useSearch();
+  const { products, loading, error, loadProducts, getProductById } =
+    useProducts();
+
   const { handleAddItem } = useCart();
+
+  useEffect(() => {
+    if (products.length === 0) {
+      loadProducts();
+    }
+  }, [products.length, loadProducts]);
+
+  const filteredProducts = useMemo(() => {
+    if (!term) return products;
+
+    return products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(term.toLowerCase()) ||
+        product.description.toLowerCase().includes(term.toLowerCase())
+    );
+  }, [term, products]);
 
   const handleProductClick = (productId: string) => {
     console.log(`Produto clicado: ${productId}`);
   };
 
-  const handleBuyClick = (product: IProduct, event: React.MouseEvent) => {
-    event.stopPropagation();
-    handleAddItem({
-      ...product,
-    });
-  };
+  const handleBuyClick = useCallback(
+    (productId: string, event: React.MouseEvent) => {
+      event.stopPropagation();
+      console.log(`Comprar produto: ${productId}`);
+
+      const produtoComprado = getProductById(productId);
+
+      if (!produtoComprado) {
+        console.error(`Produto com ID ${productId} não encontrado.`);
+        return;
+      }
+
+      handleAddItem(produtoComprado);
+    },
+    [getProductById, handleAddItem]
+  );
+
+  if (loading) {
+    return (
+      <ProductGridSection>
+        <ProductGridContainer>
+          <ProductGridTitle>{title}</ProductGridTitle>
+          <ProductGrid>
+            <p>Carregando produtos...</p>
+          </ProductGrid>
+        </ProductGridContainer>
+      </ProductGridSection>
+    );
+  }
+
+  if (error) {
+    return (
+      <ProductGridSection>
+        <ProductGridContainer>
+          <ProductGridTitle>{title}</ProductGridTitle>
+          <ProductGrid>
+            <p>Erro ao carregar produtos: {error}</p>
+          </ProductGrid>
+        </ProductGridContainer>
+      </ProductGridSection>
+    );
+  }
 
   return (
     <ProductGridSection>
       <ProductGridContainer>
-        <ProductGridTitle className="product-grid-title">
-          {title}
-        </ProductGridTitle>
+        <ProductGridTitle>{title}</ProductGridTitle>
 
         <ProductGrid>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}

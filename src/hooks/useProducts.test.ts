@@ -1,71 +1,121 @@
 import { renderHook, act } from "@testing-library/react";
 import { useProducts } from "./useProducts";
-import { productService } from "service/productService";
-import * as SearchHook from "hooks/useSearch";
+import * as Redux from "react-redux";
+import { IProduct } from "types/Product";
 
-jest.mock("service/productService");
-const mockedProductService = productService as jest.Mocked<
-  typeof productService
->;
+jest.mock("react-redux");
+const mockedUseDispatch = jest.spyOn(Redux, "useDispatch");
+const mockedUseSelector = jest.spyOn(Redux, "useSelector");
 
-const mockProducts = [
+const mockDispatch = jest.fn();
+
+const mockProducts: IProduct[] = [
   {
     id: "1",
-    name: "Sérum Vitamina C",
-    description: "Antioxidante",
+    name: "Sérum Hidratante",
+    description: "Para pele seca",
     price: 100,
-    image: "",
+    image: "img1.jpg",
     tags: [],
   },
   {
     id: "2",
-    name: "Protetor Solar",
-    description: "Proteção UVA/UVB",
+    name: "Protetor Solar FPS 50",
+    description: "Proteção para o rosto",
     price: 80,
-    image: "",
+    image: "img2.jpg",
     tags: [],
   },
 ];
 
 describe("useProducts Hook", () => {
-  const mockUseSearchHook = jest.spyOn(SearchHook, "useSearch");
-
   beforeEach(() => {
-    mockedProductService.getProducts.mockResolvedValue(mockProducts);
+    mockedUseDispatch.mockReturnValue(mockDispatch);
+    mockedUseSelector.mockClear();
+    mockDispatch.mockClear();
   });
 
-  it("deve buscar e retornar todos os produtos sem termo de busca", async () => {
-    mockUseSearchHook.mockReturnValue({ term: "", setTerm: jest.fn() });
+  it("deve retornar o estado inicial da slice de produtos", () => {
+    // Arrange
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({
+        products: { items: [], loading: false, error: null },
+      })
+    );
+
+    // Act
     const { result } = renderHook(() => useProducts());
-    await act(async () => {
-      await Promise.resolve();
-    });
-    expect(result.current.products).toEqual(mockProducts);
+
+    // Assert
+    expect(result.current.products).toEqual([]);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeNull();
+    expect(result.current.totalProducts).toBe(0);
   });
 
-  it("deve filtrar os produtos pelo nome", async () => {
-    mockUseSearchHook.mockReturnValue({
-      term: "Sérum",
-      setTerm: jest.fn(),
-    });
+  it("deve chamar o dispatch para carregar os produtos", () => {
+    // Arrange
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({ products: { items: [], loading: false, error: null } })
+    );
     const { result } = renderHook(() => useProducts());
-    await act(async () => {
-      await Promise.resolve();
+
+    // Act
+    act(() => {
+      result.current.loadProducts();
     });
-    expect(result.current.products).toHaveLength(1);
-    expect(result.current.products[0].name).toBe("Sérum Vitamina C");
+
+    // Assert
+    expect(mockDispatch).toHaveBeenCalledTimes(1);
+    expect(typeof mockDispatch.mock.calls[0][0]).toBe("function");
   });
 
-  it("deve filtrar os produtos pela descrição", async () => {
-    mockUseSearchHook.mockReturnValue({
-      term: "Proteção",
-      setTerm: jest.fn(),
-    });
+  it("deve retornar o número total de produtos corretamente", () => {
+    // Arrange
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({
+        products: { items: mockProducts, loading: false, error: null },
+      })
+    );
+
+    // Act
     const { result } = renderHook(() => useProducts());
-    await act(async () => {
-      await Promise.resolve();
-    });
-    expect(result.current.products).toHaveLength(1);
-    expect(result.current.products[0].name).toBe("Protetor Solar");
+
+    // Assert
+    expect(result.current.totalProducts).toBe(2);
+  });
+
+  it("deve filtrar os produtos corretamente com base no termo de busca", () => {
+    // Arrange
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({
+        products: { items: mockProducts, loading: false, error: null },
+      })
+    );
+    const { result } = renderHook(() => useProducts());
+
+    // Act
+    const filtered = result.current.filteredProducts("Solar");
+
+    // Assert
+    expect(filtered).toHaveLength(1);
+    expect(filtered[0].name).toBe("Protetor Solar FPS 50");
+  });
+
+  it("deve encontrar um produto pelo ID com getProductById", () => {
+    // Arrange
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({
+        products: { items: mockProducts, loading: false, error: null },
+      })
+    );
+    const { result } = renderHook(() => useProducts());
+
+    // Act
+    const product = result.current.getProductById("1");
+
+    // Assert
+    expect(product).toBeDefined();
+    expect(product?.name).toBe("Sérum Hidratante");
   });
 });
