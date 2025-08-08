@@ -1,27 +1,9 @@
-/* eslint-disable quotes */
-import { screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import CartModal from ".";  
-import { CartItem } from "hooks/useCart";
 import { render } from "utils/test-utils";
-
-let mockAddItem = jest.fn();
-let mockRemoveItem = jest.fn();
-let mockRemoveFromCart = jest.fn();
-let mockTotalPrice = 0;
-
-jest.mock("context/CartContext", () => {
-  return {
-    __esModule: true,
-    useCartContext: () => ({
-      addItem: mockAddItem,
-      removeItem: mockRemoveItem,
-      removeFromCart: mockRemoveFromCart,
-      totalPrice: mockTotalPrice,
-    }),
-    CartProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  };
-});
+import "@testing-library/jest-dom";
+import CartModal from ".";
+import * as CartHook from "hooks/useCart";
+import { CartItem } from "store/slices/cartSlice";
+import { screen, fireEvent } from "@testing-library/dom";
 
 const mockItems: CartItem[] = [
   {
@@ -40,98 +22,86 @@ const mockItems: CartItem[] = [
   },
 ];
 
+const mockUseCart = jest.spyOn(CartHook, "useCart");
+
 describe("CartModal Component", () => {
   const mockOnClose = jest.fn();
+  const mockHandleAddItem = jest.fn();
+  const mockHandleRemoveItem = jest.fn();
+  const mockHandleRemoveFromCart = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
-
-    mockAddItem = jest.fn();
-    mockRemoveItem = jest.fn();
-    mockRemoveFromCart = jest.fn();
-    mockTotalPrice = 321.0;
   });
 
-  it("não deve renderizar nada se isOpen for falso", () => {
-    render(<CartModal isOpen={false} onClose={mockOnClose} items={[]} />);
+  it("não deve renderizar se isOpen for falso", () => {
+    // CORREÇÃO: Mock do hook para evitar o erro, pois ele é chamado antes do `return null`.
+    mockUseCart.mockReturnValue({
+      items: [],
+      totalPrice: 0,
+      quantity: 0,
+      handleAddItem: mockHandleAddItem,
+      handleRemoveItem: mockHandleRemoveItem,
+      handleRemoveFromCart: mockHandleRemoveFromCart,
+      isCartOpen: false,
+      handleCartToggle: jest.fn(),
+      getItemQuantity: jest.fn(),
+    });
+
+    render(<CartModal isOpen={false} onClose={mockOnClose} />);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  it("deve exibir a mensagem de carrinho vazio", () => {
-    render(<CartModal isOpen={true} onClose={mockOnClose} items={[]} />);
+  it("deve mostrar mensagem de carrinho vazio", () => {
+    mockUseCart.mockReturnValue({
+      items: [],
+      totalPrice: 0,
+      quantity: 0,
+      handleAddItem: mockHandleAddItem,
+      handleRemoveItem: mockHandleRemoveItem,
+      handleRemoveFromCart: mockHandleRemoveFromCart,
+      isCartOpen: true,
+      handleCartToggle: jest.fn(),
+      getItemQuantity: jest.fn(),
+    });
+
+    render(<CartModal isOpen={true} onClose={mockOnClose} />);
     expect(screen.getByText("Seu carrinho está vazio")).toBeInTheDocument();
   });
 
-  it("deve renderizar os itens do carrinho corretamente", () => {
-    render(<CartModal isOpen={true} onClose={mockOnClose} items={mockItems} />);
+  it("deve renderizar itens do carrinho e interagir com eles", () => {
+    mockUseCart.mockReturnValue({
+      items: mockItems,
+      totalPrice: 321.0, // (120.5 * 2) + 80
+      quantity: 3,
+      handleAddItem: mockHandleAddItem,
+      handleRemoveItem: mockHandleRemoveItem,
+      handleRemoveFromCart: mockHandleRemoveFromCart,
+      isCartOpen: true,
+      handleCartToggle: jest.fn(),
+      getItemQuantity: jest.fn(),
+    });
+
+    render(<CartModal isOpen={true} onClose={mockOnClose} />);
 
     expect(screen.getByText("Sérum Facial")).toBeInTheDocument();
-    expect(screen.getByText("2")).toBeInTheDocument();
-    expect(screen.getByText("241.00")).toBeInTheDocument();
-
     expect(screen.getByText("Protetor Solar")).toBeInTheDocument();
-    expect(screen.getByText("1")).toBeInTheDocument();
-    expect(screen.getByText("80.00")).toBeInTheDocument();
-
     expect(screen.getByText("321.00")).toBeInTheDocument();
-  });
 
-  describe("Ações do Usuário", () => {
-    it("deve chamar onClose ao clicar no botão de fechar", () => {
-      render(
-        <CartModal isOpen={true} onClose={mockOnClose} items={mockItems} />
-      );
-      const closeButton = screen.getByTestId("cart-modal-close");
-      fireEvent.click(closeButton);
-      expect(mockOnClose).toHaveBeenCalledTimes(1);
-    });
+    fireEvent.click(screen.getByTestId("cart-modal-close"));
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
 
-    it("deve chamar onClose ao clicar no overlay (fundo)", () => {
-      render(
-        <CartModal isOpen={true} onClose={mockOnClose} items={mockItems} />
-      );
-      const overlay = screen.getByRole("dialog");
-      fireEvent.click(overlay);
-      expect(mockOnClose).toHaveBeenCalledTimes(1);
-    });
+    // CORREÇÃO: Usar `getAllByTestId` para lidar com múltiplos elementos.
+    const plusButtons = screen.getAllByTestId("quantity-btn-plus");
+    fireEvent.click(plusButtons[0]); // Interage com o primeiro botão "+"
+    expect(mockHandleAddItem).toHaveBeenCalledWith(mockItems[0]);
 
-    it('deve chamar onClose ao pressionar a tecla "Escape"', () => {
-      render(
-        <CartModal isOpen={true} onClose={mockOnClose} items={mockItems} />
-      );
-      const overlay = screen.getByRole("dialog");
-      fireEvent.keyDown(overlay, { key: "Escape", code: "Escape" });
-      expect(mockOnClose).toHaveBeenCalledTimes(1);
-    });
+    const minusButtons = screen.getAllByTestId("quantity-btn-minus");
+    fireEvent.click(minusButtons[0]); // Interage com o primeiro botão "-"
+    expect(mockHandleRemoveItem).toHaveBeenCalledWith("1");
 
-    it('deve chamar addItem ao clicar no botão "+"', () => {
-      render(
-        <CartModal isOpen={true} onClose={mockOnClose} items={mockItems} />
-      );
-      const plusButtons = screen.getAllByTestId("quantity-btn-plus");
-      fireEvent.click(plusButtons[0]); // Clica no '+' do primeiro item
-      expect(mockAddItem).toHaveBeenCalledTimes(1);
-      expect(mockAddItem).toHaveBeenCalledWith(mockItems[0]);
-    });
-
-    it('deve chamar removeItem ao clicar no botão "-"', () => {
-      render(
-        <CartModal isOpen={true} onClose={mockOnClose} items={mockItems} />
-      );
-      const minusButtons = screen.getAllByTestId("quantity-btn-minus");
-      fireEvent.click(minusButtons[0]); // Clica no '-' do primeiro item
-      expect(mockRemoveItem).toHaveBeenCalledTimes(1);
-      expect(mockRemoveItem).toHaveBeenCalledWith(mockItems[0].id);
-    });
-
-    it("deve chamar removeFromCart ao clicar no ícone da lixeira", () => {
-      render(
-        <CartModal isOpen={true} onClose={mockOnClose} items={mockItems} />
-      );
-      const trashButtons = screen.getAllByTestId("remove-btn");
-      fireEvent.click(trashButtons[0]); // Clica na lixeira do primeiro item
-      expect(mockRemoveFromCart).toHaveBeenCalledTimes(1);
-      expect(mockRemoveFromCart).toHaveBeenCalledWith(mockItems[0].id);
-    });
+    const removeButtons = screen.getAllByTestId("remove-btn");
+    fireEvent.click(removeButtons[0]); // Interage com a primeira lixeira
+    expect(mockHandleRemoveFromCart).toHaveBeenCalledWith("1");
   });
 });

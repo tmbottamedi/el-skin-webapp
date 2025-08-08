@@ -1,13 +1,13 @@
 import ProductCard from "components/ProductCard";
-import { useCartContext } from "context/CartContext";
 import { IProduct } from "types/Product";
 import { useProducts } from "hooks/useProducts";
 import styled from "styled-components";
+import { useCart } from "hooks/useCart";
 
 function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
   const { products } = useProducts();
-  const { addItem, getItemQuantity } = useCartContext();
+  const { handleAddItem } = useCart();
 
   const handleProductClick = (productId: string) => {
     console.log(`Produto clicado: ${productId}`);
@@ -15,16 +15,17 @@ function ProductShowcase() {
 
   const handleBuyClick = (product: IProduct, event: React.MouseEvent) => {
     event.stopPropagation();
-    addItem({
+    handleAddItem({
       ...product,
-      quantity: getItemQuantity(product.id) + 1,
     });
   };
 
   return (
     <ProductGridSection>
-      <ProductGridContainer >
-        <ProductGridTitle className="product-grid-title">{title}</ProductGridTitle>
+      <ProductGridContainer>
+        <ProductGridTitle className="product-grid-title">
+          {title}
+        </ProductGridTitle>
 
         <ProductGrid>
           {products.map((product) => (
@@ -35,8 +36,8 @@ function ProductShowcase() {
               onBuyClick={handleBuyClick}
             />
           ))}
-        </ProductGrid >
-      </ProductGridContainer >
+        </ProductGrid>
+      </ProductGridContainer>
     </ProductGridSection>
   );
 }

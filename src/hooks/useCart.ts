@@ -1,26 +1,19 @@
-import { useCallback, useReducer, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useMemo, useCallback } from "react";
+import type { RootState, AppDispatch } from "store";
 import {
-  cartReducer,
-  CartState,
-  ADD_ITEM,
-  DECREMENT_ITEM,
-  REMOVE_FROM_CART,
-  TOGGLE_CART,
-} from "reducers/cartReducer";
-
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
+  addItem,
+  removeItem,
+  removeFromCart,
+  toggleCart,
+  CartItem,
+} from "store/slices/cartSlice";
 
 export interface UseCartReturn {
   items: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
-  removeFromCart: (id: string) => void;
+  handleAddItem: (item: Omit<CartItem, "quantity">) => void;
+  handleRemoveItem: (id: string) => void;
+  handleRemoveFromCart: (id: string) => void;
   getItemQuantity: (id: string) => number;
   isCartOpen: boolean;
   handleCartToggle: () => void;
@@ -28,16 +21,13 @@ export interface UseCartReturn {
   totalPrice: number;
 }
 
-const initialState: CartState = {
-  items: [],
-  isCartOpen: false,
-};
-
 export const useCart = (): UseCartReturn => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+  const dispatch = useDispatch<AppDispatch>();
+  const items = useSelector((state: RootState) => state.cart.items);
+  const isCartOpen = useSelector((state: RootState) => state.cart.isCartOpen);
 
   const { totalPrice, quantity } = useMemo(() => {
-    return state.items.reduce(
+    return items.reduce(
       (acc, item) => {
         acc.totalPrice += item.price * item.quantity;
         acc.quantity += item.quantity;
@@ -45,37 +35,47 @@ export const useCart = (): UseCartReturn => {
       },
       { totalPrice: 0, quantity: 0 }
     );
-  }, [state.items]);
+  }, [items]);
 
-  const addItem = useCallback((item: CartItem) => {
-    dispatch({ type: ADD_ITEM, payload: item });
-  }, []);
+  const handleAddItem = useCallback(
+    (item: Omit<CartItem, "quantity">) => {
+      dispatch(addItem(item));
+    },
+    [dispatch]
+  );
 
-  const removeItem = useCallback((id: string) => {
-    dispatch({ type: DECREMENT_ITEM, payload: id });
-  }, []);
+  const handleRemoveItem = useCallback(
+    (id: string) => {
+      dispatch(removeItem({ id }));
+    },
+    [dispatch]
+  );
 
-  const removeFromCart = useCallback((id: string) => {
-    dispatch({ type: REMOVE_FROM_CART, payload: id });
-  }, []);
+  const handleRemoveFromCart = useCallback(
+    (id: string) => {
+      dispatch(removeFromCart({ id }));
+    },
+    [dispatch]
+  );
 
   const handleCartToggle = useCallback(() => {
-    dispatch({ type: TOGGLE_CART });
-  }, []);
+    dispatch(toggleCart());
+  }, [dispatch]);
 
   const getItemQuantity = useCallback(
     (id: string): number => {
-      const item = state.items.find((item) => item.id === id);
+      const item = items.find((item) => item.id === id);
       return item ? item.quantity : 0;
     },
-    [state.items]
+    [items]
   );
 
   return {
-    ...state,
-    addItem,
-    removeItem,
-    removeFromCart,
+    items,
+    isCartOpen,
+    handleAddItem,
+    handleRemoveItem,
+    handleRemoveFromCart,
     handleCartToggle,
     getItemQuantity,
     quantity,

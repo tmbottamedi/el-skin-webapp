@@ -2,13 +2,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import CartModal from "components/CartModal";
-import { useCartContext } from "context/CartContext";
 import styled from "styled-components";
 import { useSearch } from "hooks/useSearch";
+import { useCart } from "hooks/useCart";
 
 export default function Header() {
   const { term, setTerm } = useSearch();
-  const { items, isCartOpen, handleCartToggle, quantity } = useCartContext();
+  const { isCartOpen, handleCartToggle, quantity } = useCart();
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     setTerm(e.target.value);
@@ -60,7 +60,7 @@ export default function Header() {
           <a href="/kits-promocao">Kits até 50% OFF</a>
         </PromotionBanner>
       </HeaderBottom>
-      <CartModal isOpen={isCartOpen} onClose={handleCartToggle} items={items} />
+      <CartModal isOpen={isCartOpen} onClose={handleCartToggle} />
     </HeaderContainer>
   );
 }

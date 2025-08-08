@@ -6,18 +6,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { useCartContext } from "context/CartContext";
-import { CartItem } from "hooks/useCart";
+import { useCart } from "hooks/useCart";
 import styled from "styled-components";
 
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
-  items: CartItem[];
 }
 
-const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
-  const { addItem, removeItem, totalPrice, removeFromCart } = useCartContext();
+const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
+  const {
+    items,
+    handleAddItem,
+    handleRemoveItem,
+    totalPrice,
+    handleRemoveFromCart,
+  } = useCart();
 
   if (!isOpen) return null;
 
@@ -44,38 +48,57 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
       <CartModalContainer>
         <CartModalHeader>
           <h2 id="cart-modal-title">Carrinho</h2>
-          <CartModalCloseButton data-testid="cart-modal-close" onClick={onClose}>
+          <CartModalCloseButton
+            data-testid="cart-modal-close"
+            onClick={onClose}
+          >
             <FontAwesomeIcon icon={faTimes} />
           </CartModalCloseButton>
         </CartModalHeader>
 
         <CartModalContent>
           {items.length === 0 ? (
-            <CartEmpty><p>Seu carrinho está vazio</p></CartEmpty>
+            <CartEmpty>
+              <p>Seu carrinho está vazio</p>
+            </CartEmpty>
           ) : (
             <>
               <CartItems>
                 {items.map((item) => (
                   <CartItemStyled key={item.id}>
-                    <CartItemImage><img src={item.image} alt={item.name} /></CartItemImage>
+                    <CartItemImage>
+                      <img src={item.image} alt={item.name} />
+                    </CartItemImage>
                     <CartItemInfo>
                       <CartItemName>{item.name}</CartItemName>
                       <CartItemControls>
                         <QuantityLabel>Quantidade</QuantityLabel>
                         <QuantityControls>
-                          <QuantityButton data-testid="quantity-btn-minus" onClick={() => removeItem(item.id)}>
+                          <QuantityButton
+                            data-testid="quantity-btn-minus"
+                            onClick={() => handleRemoveItem(item.id)}
+                          >
                             <FontAwesomeIcon icon={faMinus} />
                           </QuantityButton>
                           <QuantityDisplay>{item.quantity}</QuantityDisplay>
-                          <QuantityButton data-testid="quantity-btn-plus" onClick={() => addItem(item)}>
+                          <QuantityButton
+                            data-testid="quantity-btn-plus"
+                            onClick={() => handleAddItem(item)}
+                          >
                             <FontAwesomeIcon icon={faPlus} />
                           </QuantityButton>
                         </QuantityControls>
-                        <RemoveButton data-testid="remove-btn" title="Remover item" onClick={() => removeFromCart(item.id)}>
+                        <RemoveButton
+                          data-testid="remove-btn"
+                          title="Remover item"
+                          onClick={() => handleRemoveFromCart(item.id)}
+                        >
                           <FontAwesomeIcon icon={faTrash} />
                         </RemoveButton>
                       </CartItemControls>
-                      <CartItemPrice>{(item.price * item.quantity).toFixed(2)}</CartItemPrice>
+                      <CartItemPrice>
+                        {(item.price * item.quantity).toFixed(2)}
+                      </CartItemPrice>
                     </CartItemInfo>
                   </CartItemStyled>
                 ))}
@@ -84,7 +107,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, items }) => {
                 <TotalLabel>Total</TotalLabel>
                 <TotalPrice>{totalPrice?.toFixed(2) ?? 0}</TotalPrice>
               </CartTotal>
-              <FinalizeButton data-testid="finalize-btn">Finalizar compra</FinalizeButton>
+              <FinalizeButton data-testid="finalize-btn">
+                Finalizar compra
+              </FinalizeButton>
             </>
           )}
         </CartModalContent>

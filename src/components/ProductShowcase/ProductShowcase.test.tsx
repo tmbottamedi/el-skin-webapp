@@ -1,116 +1,74 @@
-import "@testing-library/jest-dom";
-import { act, screen } from "@testing-library/react";
-import ProductShowcase from ".";
 import { render } from "utils/test-utils";
+import "@testing-library/jest-dom";
+import ProductShowcase from ".";
+import * as ProductsHook from "hooks/useProducts";
+import * as CartHook from "hooks/useCart";
+import { IProduct } from "types/Product";
+import { screen, fireEvent } from "@testing-library/dom";
 
-const mockProducts = [
+const mockProducts: IProduct[] = [
   {
     id: "1",
-    name: "Produto 1",
+    name: "Produto Vitamina C",
     description: "Descrição do produto 1",
     price: 99.99,
     image: "/image1.jpg",
-    tags: ["Proteção", "protection"],
-  },
-  {
-    id: "2",
-    name: "Produto 2",
-    description: "Descrição do produto 2",
-    price: 149.99,
-    image: "/image2.jpg",
-    tags: ["Rosto", "face"],
+    tags: ["Proteção"],
   },
 ];
 
-// Mock dos serviços
-jest.mock("service/productService", () => ({
-  productService: {
-    getProducts: () => mockProducts,
-  },
-}));
+const mockUseProducts = jest.spyOn(ProductsHook, "useProducts");
+const mockUseCart = jest.spyOn(CartHook, "useCart");
+const mockHandleAddItem = jest.fn();
 
-// Mock do SearchContext para controlar o termo de busca
-let mockSearchTerm = "";
-
-const mockAddItem = jest.fn();
-
-jest.mock("hooks/useSearch", () => ({
-  useSearch: () => ({
-    term: mockSearchTerm,
-    setTerm: jest.fn(),
-    clearSearch: jest.fn(),
-  }),
-}));
-
-jest.mock("context/CartContext", () => {
-  return {
-    __esModule: true,
-    useCartContext: () => ({
-      addItem: mockAddItem,
-      getItemQuantity: jest.fn().mockReturnValue(0),
-    }),
-    CartProvider: ({ children }: { children: React.ReactNode }) => (
-      <>{children}</>
-    ),
-  };
-});
-
-const renderWithAct = async () => {
-  let component;
-  await act(async () => {
-    component = render(<ProductShowcase />);
+describe("ProductShowcase Component", () => {
+  beforeEach(() => {
+    mockUseProducts.mockReturnValue({ products: mockProducts });
+    mockUseCart.mockReturnValue({
+      items: [],
+      totalPrice: 0,
+      quantity: 0,
+      handleAddItem: mockHandleAddItem,
+      handleRemoveItem: jest.fn(),
+      handleRemoveFromCart: jest.fn(),
+      isCartOpen: false,
+      handleCartToggle: jest.fn(),
+      getItemQuantity: jest.fn(),
+    });
+    jest.clearAllMocks();
   });
-  return component;
-};
 
-test("componente ProductShowcase deve ser renderizado", async () => {
-  await renderWithAct();
-
-  expect(screen.getByText("nossos queridinhos estão aqui")).toBeInTheDocument();
-});
-
-test("deve exibir produtos corretamente", async () => {
-  await renderWithAct();
-
-  expect(screen.getByText("Produto 1")).toBeInTheDocument();
-  expect(screen.getByText("Descrição do produto 1")).toBeInTheDocument();
-  expect(screen.getByText("R$ 99,99")).toBeInTheDocument();
-
-  expect(screen.getByText("Produto 2")).toBeInTheDocument();
-  expect(screen.getByText("Descrição do produto 2")).toBeInTheDocument();
-  expect(screen.getByText("R$ 149,99")).toBeInTheDocument();
-});
-
-test("Deve chamar console.log ao clicar no produto", async () => {
-  const consoleSpy = jest
-    .spyOn(console, "log")
-    .mockImplementation(() => undefined);
-
-  await renderWithAct();
-
-  const productCard = screen.getByText("Produto 1");
-  productCard.click();
-
-  expect(consoleSpy).toHaveBeenCalledWith("Produto clicado: 1");
-
-  consoleSpy.mockRestore();
-});
-
-test("Deve chamar addItem ao clicar no botão comprar", async () => {
-  await renderWithAct();
-  const buyButtons = screen.getAllByTestId("product-buy-button");
-  buyButtons[0].click();
-  expect(mockAddItem).toHaveBeenCalledTimes(1);
-  expect(mockAddItem).toHaveBeenCalledWith({
-    ...mockProducts[0],
-    quantity: 1,
+  it("deve renderizar o título e os produtos", () => {
+    render(<ProductShowcase />);
+    expect(
+      screen.getByText("nossos queridinhos estão aqui")
+    ).toBeInTheDocument();
+    expect(screen.getByText("Produto Vitamina C")).toBeInTheDocument();
   });
-});
 
-test("Deve filtrar produtos com base no termo de busca", async () => {
-  mockSearchTerm = "Produto 1";
-  await renderWithAct();
+  it("deve chamar handleAddItem ao clicar em comprar", () => {
+    const consoleSpy = jest.spyOn(console, "log");
+    render(<ProductShowcase />);
 
-  expect(screen.getByText("Produto 1")).toBeInTheDocument();
-  expect(screen.queryByText("Produto 2")).not.toBeInTheDocument();
+    const buyButton = screen.getByTestId("product-buy-button");
+    fireEvent.click(buyButton);
+
+    expect(mockHandleAddItem).toHaveBeenCalledTimes(1);
+    expect(mockHandleAddItem).toHaveBeenCalledWith(mockProducts[0]);
+
+    // Verifica se a propagação do evento foi parada
+    expect(consoleSpy).not.toHaveBeenCalledWith("Produto clicado: 1");
+    consoleSpy.mockRestore();
+  });
+
+  it("deve chamar o productClick handler ao clicar no card", () => {
+    const consoleSpy = jest.spyOn(console, "log");
+    render(<ProductShowcase />);
+
+    const productCard = screen.getByTestId("product-card");
+    fireEvent.click(productCard);
+
+    expect(consoleSpy).toHaveBeenCalledWith("Produto clicado: 1");
+    consoleSpy.mockRestore();
+  });
 });

@@ -1,24 +1,33 @@
 import { renderHook, act } from "@testing-library/react";
-import { useCart, CartItem } from "./useCart";
+import { useCart } from "./useCart";
+import * as Redux from "react-redux";
+import { CartItem } from "store/slices/cartSlice";
 
-const mockItem: CartItem = {
+jest.mock("react-redux");
+const mockedUseDispatch = jest.spyOn(Redux, "useDispatch");
+const mockedUseSelector = jest.spyOn(Redux, "useSelector");
+
+const mockDispatch = jest.fn();
+
+const mockItem: Omit<CartItem, "quantity"> = {
   id: "1",
   name: "Produto Teste",
   price: 100,
-  quantity: 1,
   image: "test.jpg",
 };
 
-const mockItem2: CartItem = {
-  id: "2",
-  name: "Produto Teste 2",
-  price: 50,
-  quantity: 1,
-  image: "test2.jpg",
-};
-
 describe("useCart Hook", () => {
-  it("deve inicializar com o carrinho vazio e fechado", () => {
+  beforeEach(() => {
+    mockedUseDispatch.mockReturnValue(mockDispatch);
+    mockedUseSelector.mockClear();
+    mockDispatch.mockClear();
+  });
+
+  it("deve retornar o estado inicial do carrinho", () => {
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({ cart: { items: [], isCartOpen: false } })
+    );
+
     const { result } = renderHook(() => useCart());
 
     expect(result.current.items).toEqual([]);
@@ -27,114 +36,47 @@ describe("useCart Hook", () => {
     expect(result.current.totalPrice).toBe(0);
   });
 
-  it("deve adicionar um novo item ao carrinho", () => {
+  it("deve chamar o dispatch para adicionar um item", () => {
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({ cart: { items: [], isCartOpen: false } })
+    );
     const { result } = renderHook(() => useCart());
 
     act(() => {
-      result.current.addItem(mockItem);
+      result.current.handleAddItem(mockItem);
     });
 
-    expect(result.current.items).toHaveLength(1);
-    expect(result.current.items[0]).toEqual({ ...mockItem, quantity: 1 });
-    expect(result.current.quantity).toBe(1);
-    expect(result.current.totalPrice).toBe(100);
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: "cart/addItem",
+      payload: mockItem,
+    });
   });
 
-  it("deve incrementar a quantidade de um item existente", () => {
+  it("deve calcular o total e a quantidade corretamente", () => {
+    const items = [
+      { ...mockItem, quantity: 2 },
+      { id: "2", name: "Outro", price: 50, image: "img.png", quantity: 1 },
+    ];
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({ cart: { items, isCartOpen: false } })
+    );
+
     const { result } = renderHook(() => useCart());
 
-    act(() => {
-      result.current.addItem(mockItem);
-    });
-    act(() => {
-      result.current.addItem(mockItem);
-    });
-
-    expect(result.current.items).toHaveLength(1);
-    expect(result.current.items[0].quantity).toBe(2);
-    expect(result.current.quantity).toBe(2);
-    expect(result.current.totalPrice).toBe(200);
+    expect(result.current.quantity).toBe(3);
+    expect(result.current.totalPrice).toBe(250);
   });
 
-  it("deve decrementar a quantidade de um item", () => {
+  it("deve chamar o dispatch para abrir e fechar o carrinho", () => {
+    mockedUseSelector.mockImplementation((selector) =>
+      selector({ cart: { items: [], isCartOpen: false } })
+    );
     const { result } = renderHook(() => useCart());
-
-    act(() => {
-      result.current.addItem(mockItem);
-    });
-    act(() => {
-      result.current.addItem(mockItem);
-    });
-    act(() => {
-      result.current.removeItem(mockItem.id);
-    });
-
-    expect(result.current.items[0].quantity).toBe(1);
-    expect(result.current.quantity).toBe(1);
-    expect(result.current.totalPrice).toBe(100);
-  });
-
-  it("deve remover um item se a quantidade for 1 ao decrementar", () => {
-    const { result } = renderHook(() => useCart());
-
-    act(() => {
-      result.current.addItem(mockItem);
-    });
-    act(() => {
-      result.current.removeItem(mockItem.id);
-    });
-
-    expect(result.current.items).toHaveLength(0);
-  });
-
-  it("deve remover um item completamente do carrinho", () => {
-    const { result } = renderHook(() => useCart());
-
-    act(() => {
-      result.current.addItem(mockItem);
-    });
-    act(() => {
-      result.current.addItem(mockItem2);
-    });
-    act(() => {
-      result.current.removeFromCart(mockItem.id);
-    });
-
-    expect(result.current.items).toHaveLength(1);
-    expect(result.current.items[0].id).toBe("2");
-    expect(result.current.quantity).toBe(1);
-    expect(result.current.totalPrice).toBe(50);
-  });
-
-  it("deve alternar a visibilidade do modal do carrinho", () => {
-    const { result } = renderHook(() => useCart());
-
-    expect(result.current.isCartOpen).toBe(false);
 
     act(() => {
       result.current.handleCartToggle();
     });
 
-    expect(result.current.isCartOpen).toBe(true);
-
-    act(() => {
-      result.current.handleCartToggle();
-    });
-
-    expect(result.current.isCartOpen).toBe(false);
-  });
-
-  it("deve retornar a quantidade correta para um item específico", () => {
-    const { result } = renderHook(() => useCart());
-
-    act(() => {
-      result.current.addItem(mockItem);
-    });
-    act(() => {
-      result.current.addItem(mockItem);
-    });
-
-    expect(result.current.getItemQuantity(mockItem.id)).toBe(2);
-    expect(result.current.getItemQuantity("id-inexistente")).toBe(0);
+    expect(mockDispatch).toHaveBeenCalledWith({ type: "cart/toggleCart" });
   });
 });
