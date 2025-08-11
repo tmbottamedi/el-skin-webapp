@@ -1,13 +1,53 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { useCarousel } from "hooks/useCarousel";
 import styled, { keyframes } from "styled-components";
+import { useGetCarouselItemsQuery } from "store/api/apiSlice";
+import { useCallback, useEffect, useState } from "react";
+import { ICarouselItem } from "service/carouselService";
 
 function Carousel() {
-  const { currentItem, previousItem, nextItem } = useCarousel();
+  const { data: items = [], isLoading, error } = useGetCarouselItemsQuery();
+  const [currentItem, setCurrentItem] = useState<ICarouselItem>(items[0]);
 
-  if (!currentItem) {
+  const previousItem = useCallback(() => {
+    if (items.length === 0) {
+      return;
+    }
+    setCurrentItem((prevItem) =>
+      items.indexOf(prevItem) === 0
+        ? items[items.length - 1]
+        : items[items.indexOf(prevItem) - 1]
+    );
+  }, [items]);
+
+  const nextItem = useCallback(() => {
+    if (items.length === 0) {
+      return;
+    }
+    setCurrentItem((prevItem) =>
+      items.indexOf(prevItem) === items.length - 1
+        ? items[0]
+        : items[items.indexOf(prevItem) + 1]
+    );
+  }, [items]);
+
+  useEffect(() => {
+    const timer = setInterval(() => nextItem(), 3000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [items, currentItem, nextItem]);
+
+  if (isLoading) {
     return <h6>Carregando...</h6>;
+  }
+
+  if (error) {
+    return <h6>Erro ao carregar carousel</h6>;
+  }
+
+  if (items.length === 0) {
+    return <h6>Nenhum item encontrado</h6>;
   }
 
   return (
@@ -15,7 +55,12 @@ function Carousel() {
       <CarouselContainer>
         <CarouselContent>
           <CarouselNavButton aria-label="Voltar" onClick={previousItem}>
-            <FontAwesomeIcon width="60" height="24" icon={faAngleLeft} style={{ color: "white" }} />
+            <FontAwesomeIcon
+              width="60"
+              height="24"
+              icon={faAngleLeft}
+              style={{ color: "white" }}
+            />
           </CarouselNavButton>
 
           <CarouselText>
@@ -29,7 +74,12 @@ function Carousel() {
           </CarouselText>
 
           <CarouselNavButton aria-label="Próximo" onClick={nextItem}>
-            <FontAwesomeIcon width="60" height="24" icon={faAngleRight} style={{ color: "white" }} />
+            <FontAwesomeIcon
+              width="60"
+              height="24"
+              icon={faAngleRight}
+              style={{ color: "white" }}
+            />
           </CarouselNavButton>
         </CarouselContent>
       </CarouselContainer>

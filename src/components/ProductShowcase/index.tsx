@@ -1,23 +1,16 @@
 import ProductCard from "components/ProductCard";
-import { useProducts } from "hooks/useProducts";
 import styled from "styled-components";
 import { useCart } from "hooks/useCart";
 import { useSearch } from "hooks/useSearch";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useGetProductsQuery } from "store/api/apiSlice";
 
 function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
   const { term } = useSearch();
-  const { products, loading, error, loadProducts, getProductById } =
-    useProducts();
+  const { data: products = [], isLoading, error } = useGetProductsQuery();
 
   const { handleAddItem } = useCart();
-
-  useEffect(() => {
-    if (products.length === 0) {
-      loadProducts();
-    }
-  }, [products.length, loadProducts]);
 
   const filteredProducts = useMemo(() => {
     if (!term) return products;
@@ -28,6 +21,13 @@ function ProductShowcase() {
         product.description.toLowerCase().includes(term.toLowerCase())
     );
   }, [term, products]);
+
+  const getProductById = useCallback(
+    (id: string) => {
+      return products.find((product) => product.id === id);
+    },
+    [products]
+  );
 
   const handleProductClick = (productId: string) => {
     console.log(`Produto clicado: ${productId}`);
@@ -50,7 +50,7 @@ function ProductShowcase() {
     [getProductById, handleAddItem]
   );
 
-  if (loading) {
+  if (isLoading) {
     return (
       <ProductGridSection>
         <ProductGridContainer>
@@ -69,7 +69,7 @@ function ProductShowcase() {
         <ProductGridContainer>
           <ProductGridTitle>{title}</ProductGridTitle>
           <ProductGrid>
-            <p>Erro ao carregar produtos: {error}</p>
+            <p>Erro ao carregar produtos</p>
           </ProductGrid>
         </ProductGridContainer>
       </ProductGridSection>
