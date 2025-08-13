@@ -1,0 +1,25 @@
+.productGridSection {
+  padding: 60px 20px;
+  background-color: var(--color-background-white);
+}
+
+.productGridContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.productGridTitle {
+  text-align: center;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: 40px;
+  font-family: "Arial", sans-serif;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  justify-items: center;
+}

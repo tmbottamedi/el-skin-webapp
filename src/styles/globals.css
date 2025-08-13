@@ -1,0 +1,73 @@
+:root {
+  /* Colors */
+  --color-primary: #8b4a8b;
+  --color-primary-dark: #7a3e7a;
+  --color-primary-light: #a855a8;
+  --gradient-primary: linear-gradient(135deg, #8b4a8b 0%, #a855a8 100%);
+  --gradient-primary-hover: linear-gradient(135deg, #7a3e7a 0%, #9333ea 100%);
+
+  --color-text-primary: #333;
+  --color-text-secondary: #666;
+  --color-text-tertiary: #999;
+  --color-text-white: #ffffff;
+
+  --color-background-white: #ffffff;
+  --color-background-light: #f8f9fa;
+
+  --color-border-dark: #f0f0f0;
+
+  --color-promo: #ff6b6b;
+
+  /* Cart Colors */
+  --color-cart-background: #2d2d2d;
+  --color-cart-item: #3d3d3d;
+  --color-cart-controls: #4d4d4d;
+  --color-cart-display: #5d5d5d;
+  --color-cart-overlay: rgba(0, 0, 0, 0.5);
+  --color-cart-price: #a3e635;
+  --color-cart-remove: #ef4444;
+
+  /* Spacing */
+  --spacing-md: 1rem;
+  --spacing-xl: 2rem;
+
+  /* Border Radius */
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-pill: 25px;
+  --border-radius-round: 50%;
+
+  /* Font Sizes */
+  --font-size-xs: 0.7rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+
+  /* Font Weights */
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Shadows */
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-primary: 0 4px 16px rgba(139, 74, 139, 0.3);
+  --shadow-cart: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+  /* Z-Index */
+  --z-index-modal: 1000;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  font-size: var(--font-size-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-text-primary);
+  background-color: var(--color-background-white);
+  min-height: 100vh;
+}

@@ -1,0 +1,103 @@
+.aboutContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: sans-serif;
+  color: var(--color-text-primary);
+}
+
+.aboutTitle {
+  font-size: 1.2rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.aboutSectionOne {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.aboutTextContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutTextContent article {
+  margin-bottom: 30px;
+}
+
+.aboutTextContent h2 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.aboutTextContent p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.aboutDropperImage {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 20px;
+}
+
+.aboutImageContent {
+  flex: 1;
+}
+
+.aboutMainImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.aboutCtaSection {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+  margin: 0 -20px;
+}
+
+.aboutCtaSection h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.aboutCtaSection p {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.ctaButton {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.aboutBannerSection {
+  margin-top: 60px;
+}
+
+.aboutBannerImage {
+  width: 100%;
+  height: auto;
+}

@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import NotFound from ".";
+import NotFound from "./not-found";
 import { render } from "utils/test-utils";
 
 describe("NotFound", () => {

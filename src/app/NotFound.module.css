@@ -1,0 +1,49 @@
+.notFoundContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  font-family: sans-serif;
+  color: var(--color-text-primary);
+}
+
+.notFoundTitle {
+  font-size: 8rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  margin: 0;
+  line-height: 1;
+}
+
+.notFoundSubtitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.notFoundDescription {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  max-width: 400px;
+  margin-bottom: 30px;
+}
+
+.notFoundButton {
+  background-color: var(--color-primary-light);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.notFoundButton:hover {
+  background-color: var(--color-primary-dark);
+}

@@ -8,8 +8,8 @@ import {
   faLinkedinIn,
   faSpotify,
 } from "@fortawesome/free-brands-svg-icons";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styles from "./Footer.module.css";
+import Link from "next/link";
 
 const socialLinks = [
   { icon: faInstagram, url: "https://www.instagram.com", label: "Instagram" },
@@ -24,7 +24,7 @@ const socialLinks = [
 const footerColumns = [
   {
     title: "Sobre a AL SKIN",
-    url: "/sobre",
+    url: "/about",
     links: [
       { label: "- quem somos", url: "/quemSomos" },
       { label: "- time AL SKIN", url: "/time" },
@@ -59,112 +59,37 @@ const footerColumns = [
 
 export default function Footer() {
   return (
-    <FooterContainer>
-      <SocialSection>
+    <footer className={styles.footerContainer}>
+      <div className={styles.socialSection}>
         {socialLinks.map((link) => (
-          <SocialIconLink
+          <a
             key={link.url}
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Visite nosso ${link.label}`}
+            className={styles.socialIconLink}
           >
             <FontAwesomeIcon icon={link.icon} />
-          </SocialIconLink>
+          </a>
         ))}
-      </SocialSection>
-      <FooterColumns>
+      </div>
+      <div className={styles.footerColumns}>
         {footerColumns.map((column) => (
-          <FooterColumn key={column.title}>
+          <div key={column.title} className={styles.footerColumn}>
             <a href={column.url}>{column.title}</a>
-            <ColumnLinks>
+            <ul className={styles.columnLinks}>
               {column.links.map((link) => (
                 <li key={link.label}>
-                  <ColumnLink to={link.url}>{link.label}</ColumnLink>
+                  <Link href={link.url} className={styles.columnLink}>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
-            </ColumnLinks>
-          </FooterColumn>
+            </ul>
+          </div>
         ))}
-      </FooterColumns>
-    </FooterContainer>
+      </div>
+    </footer>
   );
 }
-
-const FooterContainer = styled.footer`
-  background-color: ${({ theme }) => theme.colors.background.light};
-  padding: 40px 20px;
-  color: ${({ theme }) => theme.colors.text.primary};
-  font-family: sans-serif;
-`;
-
-const SocialSection = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  margin-bottom: 40px;
-`;
-
-const SocialIconLink = styled.a`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  background-color: #888;
-  color: white;
-  border-radius: 50%;
-  text-decoration: none;
-  font-size: 20px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-
-  &:hover {
-    background-color: #555;
-    transform: scale(1.1);
-  }
-`;
-
-const FooterColumns = styled.div`
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-`;
-
-const FooterColumn = styled.div`
-  flex: 1;
-  min-width: 180px;
-
-  > a {
-    text-decoration: none;
-    color: ${({ theme }) => theme.colors.text.primary};
-    font-weight: bold;
-    margin-bottom: 15px;
-    display: block;
-  }
-`;
-
-const ColumnLinks = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-
-  li {
-    margin-bottom: 10px;
-  }
-`;
-
-const ColumnLink = styled(Link)`
-  text-decoration: none;
-  font-weight: normal;
-  margin: 0;
-  color: #555;
-
-  &:hover {
-    text-decoration: underline;
-    color: #000;
-  }
-`;

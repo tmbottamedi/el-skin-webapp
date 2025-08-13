@@ -1,0 +1,115 @@
+.headerContainer {
+  width: 95%;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-border-dark);
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.headerLogo {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  flex-basis: 150px;
+}
+
+.searchBar {
+  flex-grow: 1;
+  position: relative;
+  max-width: 750px;
+  margin: 0 20px;
+}
+
+.searchBar input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius-pill);
+  background-color: #f5f5f5;
+  font-size: 1rem;
+}
+
+.searchButton {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #888;
+}
+
+.userActions {
+  cursor: pointer;
+  flex-basis: 150px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.shopButton {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.shopButton span {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: var(--color-promo);
+  color: white;
+  border-radius: var(--border-radius-round);
+  padding: 2px 6px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.headerBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 15px;
+}
+
+.navLinks {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  gap: 30px;
+}
+
+.navLinks a {
+  text-decoration: none;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  padding: 5px 0;
+  transition: color 0.2s ease-in-out;
+}
+
+.navLinks a:hover {
+  color: #000;
+  font-weight: var(--font-weight-medium);
+}
+
+.promotionBanner a {
+  text-decoration: none;
+  color: var(--color-promo);
+  font-weight: var(--font-weight-bold);
+  font-size: 1rem;
+}
+
+.promotionBanner a:hover {
+  text-decoration: underline;
+}

@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Home from ".";
+import Home from "./page";
 import { render } from "utils/test-utils";
 
 // Mock dos componentes filhos para isolar o teste da página Home
