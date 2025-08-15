@@ -3,13 +3,18 @@ import ProductCard from "components/ProductCard";
 import { useCart } from "hooks/useCart";
 import { useSearch } from "hooks/useSearch";
 import { useCallback, useMemo } from "react";
-import { useGetProductsQuery } from "store/api/apiSlice";
+import useSWR from "swr";
 import styles from "./ProductShowcase.module.css";
+import { IProduct } from "types/Product";
 
 function ProductShowcase() {
   const title = "nossos queridinhos estão aqui";
   const { term } = useSearch();
-  const { data: products = [], isLoading, error } = useGetProductsQuery();
+  const {
+    data: products = [],
+    error,
+    isLoading,
+  } = useSWR<IProduct[]>("/api/products");
   const { handleAddItem } = useCart();
 
   const filteredProducts = useMemo(() => {

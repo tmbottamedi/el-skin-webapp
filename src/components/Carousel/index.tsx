@@ -1,12 +1,17 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { useGetCarouselItemsQuery } from "store/api/apiSlice";
+import useSWR from "swr";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./Carousel.module.css";
+import { ICarouselItem } from "types/Carousel";
 
 function Carousel() {
-  const { data: items = [], isLoading, error } = useGetCarouselItemsQuery();
+  const {
+    data: items = [],
+    error,
+    isLoading,
+  } = useSWR<ICarouselItem[]>("/api/carousel");
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const previousItem = useCallback(() => {

@@ -5,6 +5,9 @@ import { store } from "store";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import "styles/globals.css";
+import { SWRConfig } from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function RootLayout({
   children,
@@ -20,9 +23,11 @@ export default function RootLayout({
       </head>
       <body>
         <Provider store={store}>
-          <Header />
-          <div id="root">{children}</div>
-          <Footer />
+          <SWRConfig value={{ fetcher }}>
+            <Header />
+            <div id="root">{children}</div>
+            <Footer />
+          </SWRConfig>
         </Provider>
       </body>
     </html>
