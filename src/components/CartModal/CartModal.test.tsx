@@ -22,7 +22,8 @@ const mockItems: CartItem[] = [
   },
 ];
 
-const mockUseCart = jest.spyOn(CartHook, "useCart");
+jest.mock("hooks/useCart");
+const mockedUseCart = CartHook.useCart as jest.Mock;
 
 describe("CartModal Component", () => {
   const mockOnClose = jest.fn();
@@ -36,7 +37,7 @@ describe("CartModal Component", () => {
 
   it("não deve renderizar se isOpen for falso", () => {
     // CORREÇÃO: Mock do hook para evitar o erro, pois ele é chamado antes do `return null`.
-    mockUseCart.mockReturnValue({
+    mockedUseCart.mockReturnValue({
       items: [],
       totalPrice: 0,
       quantity: 0,
@@ -53,7 +54,7 @@ describe("CartModal Component", () => {
   });
 
   it("deve mostrar mensagem de carrinho vazio", () => {
-    mockUseCart.mockReturnValue({
+    mockedUseCart.mockReturnValue({
       items: [],
       totalPrice: 0,
       quantity: 0,
@@ -70,7 +71,7 @@ describe("CartModal Component", () => {
   });
 
   it("deve renderizar itens do carrinho e interagir com eles", () => {
-    mockUseCart.mockReturnValue({
+    mockedUseCart.mockReturnValue({
       items: mockItems,
       totalPrice: 321.0, // (120.5 * 2) + 80
       quantity: 3,

@@ -16,7 +16,11 @@ export default function NotFound() {
       <p className={styles.notFoundDescription}>
         Ops! A página que você está procurando não existe ou foi movida.
       </p>
-      <button onClick={handleGoBack} className={styles.notFoundButton}>
+      <button
+        data-testid="back-button"
+        onClick={handleGoBack}
+        className={styles.notFoundButton}
+      >
         Voltar para a página anterior
       </button>
     </div>
